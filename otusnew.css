@@ -1,0 +1,1498 @@
+/***
+ * @theme otusnew
+ * @size 16:9
+  * @auto-scaling false
+ */
+
+@import 'default';
+
+/* Центрирование изображений по умолчанию - только для обычных страниц */
+section.page img:not([class]) {
+  display: block;
+  margin: 0 auto;
+  max-width: 90%;
+  max-height: 380px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Стили для SVG/PNG диаграмм из generated/resources */
+section.page img[src*="generated/resources/"] {
+    max-height: 480px !important; /* Уменьшаем на 40px для отступов */
+    max-width: 95% !important;
+    width: auto;
+    margin: auto;
+    display: block;
+    object-fit: contain;
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Для вертикальных диаграмм */
+section.page img[src*="_vertical.svg"],
+section.page img[src*="_vertical.png"] {
+    max-height: 480px !important; /* Уменьшаем на 40px для отступов */
+    max-width: 95% !important;
+    width: auto;
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Для горизонтальных диаграмм */
+section.page img[src*="_horizontal.svg"],
+section.page img[src*="_horizontal.png"] {
+    max-width: 95% !important;
+    max-height: 410px !important; /* Уменьшаем на 40px для отступов */
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Переопределение позиционирования для page_twocolumn */
+/*
+section.page_twocolumn h1 {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+}
+
+section.page_twocolumn h2 {
+    position: static !important;
+    top: auto !important;
+    left: auto !important;
+}
+*/
+
+section {
+    font-family: 'Roboto', sans-serif;
+    background: #000;
+    margin: 0;
+    padding: 0;
+    width: 960px;
+    height: 540px;
+}
+
+section.first_page, section.page_question, section.page_section, section.page_final {
+    position: relative;
+    color: white;
+    display: flex;
+    border-bottom: 0.5px solid grey;
+}
+
+section.first_page h1 {
+    color: white;
+    position: absolute;
+    top: 117px;
+    left: 56px;
+    width: 775px;
+    height: 200px;
+    font-family: Roboto;
+    font-size: 56px;
+    font-weight: bold;
+}
+
+section.first_page h2 {
+    top: 433px;
+    left: 76px;
+    position: absolute;
+    font-family: Roboto;
+    font-size: 25px;
+    background: #8F5FE7; /* 🔹 Фиолетовый цвет фона */
+    color: white; /* 🔹 Белый текст */
+    font-weight: normal;
+    padding: 8px 20px; /* 🔹 Отступы */
+    border-radius: 8px; /* 🔹 Скругление углов */
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 🔹 Тень */
+}
+
+section.first_page hr {
+    position: absolute;
+    top: 379px; /* 🔹 Смещение по Y */
+    left: 0; /* 🔹 Смещение по X */
+    width: 960px; /* 🔹 Ширина */
+    height: 7px; /* 🔹 Высота */
+    padding: 0;
+    margin: 0;
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image5.png") no-repeat center center;
+    background-size: 100% auto; /* 🔹 Растягиваем по ширине, авто высота */
+}
+
+section.first_page h3 {
+    position: absolute;
+    left: 839px;
+    top: 29px;
+    width: 87px;
+    height: 29px;
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image4.png") no-repeat center center;
+    background-size: contain;
+}
+
+section.second_page h1 {
+    position: absolute;
+    top: 108px; /* 🔹 Смещение по Y */
+    left: 87px; /* 🔹 Смещение по X */
+    width: 72px; /* 🔹 Ширина кнопки */
+    height: 37px; /* 🔹 Высота кнопки */
+    background: #8F5FE7; /* 🔹 Цвет фона (как у кнопки на первом слайде) */
+    color: white; /* 🔹 Белый текст */
+    font-family: Roboto, sans-serif;
+    font-size: 16px; /* 🔹 Размер шрифта */
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px; /* 🔹 Расстояние между кружком и текстом */
+    padding: 0 12px; /* 🔹 Внутренний отступ */
+    border-radius: 8px; /* 🔹 Скругление углов */
+}
+
+/* 🔴 Красный кружок перед текстом */
+section.second_page h1::before {
+    content: "";
+    width: 10px;
+    height: 10px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+section.second_page h2 {
+    position: absolute;
+    top: 76px; /* 🔹 Смещение по Y */
+    left: 168px; /* 🔹 Смещение по X */
+    width: 387px; /* 🔹 Ширина блока */
+    height: 53px; /* 🔹 Высота блока */
+    font-family: Roboto, sans-serif;
+    font-size: 28px; /* 🔹 Размер шрифта */
+    font-weight: bold;
+    color: black; /* 🔹 Черный текст */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+section.second_page h3 {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 189px; /* 🔹 Смещение по Y */
+    left: 75px; /* 🔹 Смещение по X */
+    width: 833px; /* 🔹 Ширина блока */
+    height: 148px; /* 🔹 Высота блока */
+    font-family: Roboto, sans-serif;
+    font-size: 53px; /* 🔹 Размер шрифта */
+    font-weight: bold;
+    color: black; /* 🔹 Черный текст */
+    display: flex;
+    align-items: center;
+    justify-content: left;
+    text-align: left;
+}
+
+/* 🔵 Глаза (image1.png) */
+section.second_page h4 {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 408px; /* 🔹 Смещение по Y */
+    left: 87px; /* 🔹 Смещение по X */
+    width: 56px; /* 🔹 Размер */
+    height: 56px;
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image1.png") no-repeat center center;
+    background-size: contain; /* 🔹 Масштабируем в квадрат */
+}
+
+/* 🔊 Динамик (image19.png) */
+section.second_page h5 {
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 403px; /* 🔹 Смещение по Y */
+    left: 163px; /* 🔹 Смещение по X */
+    width: 57px; /* 🔹 Размер */
+    height: 57px;
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image19.png") no-repeat center center;
+    background-size: contain; /* 🔹 Масштабируем в квадрат */
+}
+
+section.second_page, section.third_page, section.page_rules, section.course_page, section.page_route, section.page_twocolumn, section.page, section.page_image, section.page_with_image, section.page_with_qimage {
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image11.png") no-repeat center center;
+    background-size: cover;
+    position: relative;
+    width: 960px;
+    height: 540px;
+    color: white;
+    display: flex;
+    border-bottom: 0.5px solid grey;
+}
+
+section.third_page .additional-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 960px; /* Устанавливаем фиксированную ширину */
+    height: 540px; /* Высота заполняет родительский элемент */
+}
+
+section.third_page .avatar {
+    position: absolute;
+    top: 50%; /* Центрируем по вертикали */
+    left: 80px; /* Немного сдвигаем, чтобы линия проходила через центр */
+    width: 277px; /* 208pt × 1.333 = 277px */
+    height: 273px; /* 205pt × 1.333 = 273px */
+    border-radius: 50%;
+    overflow: hidden;
+    transform: translateY(-50%); /* Сдвигаем на половину высоты для точного центрирования */
+    border: 0.5px solid lightgray; /* Тонкая серая рамка */
+    z-index: 10; /* Поднимаем аватар выше фона */
+}
+
+section.third_page img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Обеспечиваем, чтобы изображение занимало весь контейнер */
+}
+
+section.third_page h1 {
+    margin: 0;
+    position: absolute;
+    top: 122px; /* Вертикальное положение (переведено в px) */
+    left: 400px; /* Горизонтальное положение (переведено в px) */
+    width: 388px; /* Ширина (переведено в px) */
+    height: 40px; /* Высота (переведено в px) */
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 24px; /* Изменено на px */
+    color: #5B10B3; /* Цвет текста в Hex */
+    text-align: left; /* Выравнивание текста по центру */
+    background-color: white; /* Фоновый цвет */
+    border-radius: 8px; /* Закругленные углы */
+}
+
+section.third_page h2 {
+    margin: 0;
+    position: absolute;
+    top: 170px; /* Подгонка по нужной высоте, например, 248px */
+    left: 400px; /* Координаты по оси X */
+    font-family: Roboto, sans-serif;
+    font-weight: normal;
+    font-size: 18px !important;
+    color: black;
+    text-align: left;
+}
+
+section.third_page ul {
+    position: absolute;
+    top: 210px;
+    left: 400px;
+    font-family: Roboto, sans-serif;
+    font-size: 16px; /* Переведено из 12pt */
+    line-height: 18px; /* Переведено с 110% от 16px */
+    color: black;
+    list-style-type: disc; /* Буллеты */
+    padding-left: 20px; /* Отступ от левой стороны для буллетов */
+}
+
+section.third_page ul li {
+    margin-bottom: 10px; /* Отступ между строками */
+    color: black;
+}
+
+section.page_rules h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 43px; /* 32pt */
+    color: black;
+    width: 894px; /* 671pt */
+    height: 115px; /* 86pt */
+    position: absolute;
+    left: 53px; /* 40pt */
+    top: 45px; /* 34pt */
+}
+
+section.page_rules h3 {
+    margin: 0;
+    position: absolute;
+    width: 260px; /* ширина текста */
+    font-size: 22px; /* размер шрифта */
+    font-weight: normal; /* жирность шрифта */
+    color: black; /* черный цвет текста */
+    text-align: left;
+    /* отступ слева */
+    padding: 0 0 0 20px;
+    line-height: 1.1; /* межстрочный интервал */
+    top: 140px; /* смещение по вертикали */
+    left: 173px; /* смещение по горизонтали */
+}
+
+section.page_rules h3::before {
+    padding: 0;
+    margin: 0;
+    content: '';
+    display: inline-block;
+    width: 41.3px;
+    height: 41.3px;
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image22.png') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    left: -50px; /* смещение иконки влево от текста */
+    top: 50%; /* выравнивание по вертикали */
+    transform: translateY(-50%); /* центрирование иконки по вертикали */
+}
+
+section.page_rules h4 {
+    position: absolute;
+    width: 260px; /* ширина текста */
+    font-size: 22px; /* размер шрифта */
+    font-weight: normal; /* жирность шрифта */
+    color: black; /* черный цвет текста */
+    text-align: left;
+    padding: 0 0 0 20px; /* убираем отступы */
+    margin: 0; /* убираем внешние отступы */
+    line-height: 1.1; /* межстрочный интервал */
+    top: 215px; /* смещение по вертикали */
+    left: 173px; /* смещение по горизонтали */
+}
+
+section.page_rules h4::before {
+    content: '';
+    display: inline-block;
+    width: 41.3px;
+    height: 41.3px;
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image17.png') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    left: -50px; /* смещение иконки влево от текста */
+    top: 50%; /* выравнивание по вертикали */
+    transform: translateY(-50%); /* центрирование иконки по вертикали */
+}
+
+section.page_rules h4 .group-id {
+    display: inline;
+    font-weight: bold;
+    padding: 0; /* убираем отступы */
+    margin: 0; /* убираем внешние отступы */
+}
+
+section.page_rules h5 {
+    position: absolute;
+    width: 260px; /* ширина текста */
+    font-size: 22px; /* размер шрифта */
+    font-weight: normal; /* жирность шрифта */
+    color: black; /* черный цвет текста */
+    text-align: left;
+    padding: 0 0 0 20px; /* отступы слева */
+    margin: 0; /* убираем внешние отступы */
+    line-height: 1.1; /* межстрочный интервал */
+    top: 325px; /* смещение по вертикали */
+    left: 173px; /* смещение по горизонтали */
+}
+
+section.page_rules h5::before {
+    content: '';
+    display: inline-block;
+    width: 41.3px;
+    height: 41.3px;
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image21.png') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    left: -50px; /* смещение иконки влево от текста */
+    top: 50%; /* выравнивание по вертикали */
+    transform: translateY(-50%); /* центрирование иконки по вертикали */
+}
+
+section.page_rules h6 {
+    position: absolute;
+    width: 260px; /* ширина текста */
+    font-size: 22px; /* размер шрифта */
+    font-weight: normal; /* жирность шрифта */
+    color: black; /* черный цвет текста */
+    text-align: left;
+    padding: 0 0 0 20px; /* отступ слева */
+    margin: 0; /* убираем внешние отступы */
+    line-height: 1.1; /* межстрочный интервал */
+    top: 400px; /* смещение по вертикали */
+    left: 173px; /* смещение по горизонтали */
+}
+
+section.page_rules h6::before {
+    content: '';
+    display: inline-block;
+    width: 45.3px;
+    height: 45.3px;
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image25.png') no-repeat center center;
+    background-size: contain;
+    position: absolute;
+    left: -50px; /* смещение иконки влево от текста */
+    top: 50%; /* выравнивание по вертикали */
+    transform: translateY(-50%); /* центрирование иконки по вертикали */
+}
+
+/* Общий стиль для заголовка */
+h1 {
+    position: absolute;
+    top: 20px; /* вертикальная позиция */
+    left: 60px; /* горизонтальная позиция */
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 41px; /* размер шрифта */
+    color: black; /* цвет текста */
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+h2 {
+    position: absolute;
+    top: 60px;
+    left: 60px;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 21px;
+    color: #5B10B3;
+}
+
+/*section.course_page .start-icon {*/
+/*    position: absolute;*/
+/*    width: 51px; !* 38pt × 1.333 = 51px *!*/
+/*    height: 51px; !* 38pt × 1.333 = 51px *!*/
+/*    top: 180px; !* 135pt × 1.333 = 180px *!*/
+/*    left: 90px; !* 68pt × 1.333 = 90px *!*/
+/*    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image24.png') no-repeat center center;*/
+/*    background-size: contain; !* Сжимаем изображение, чтобы оно поместилось в заданный контейнер *!*/
+/*}*/
+
+/*section.course_page .finish-icon {*/
+/*    position: absolute;*/
+/*    left: 798px;*/
+/*    top: 382px;*/
+/*    width: 51px; !* Переведено из 38 pt *!*/
+/*    height: 51px; !* Переведено из 38 pt *!*/
+/*    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image31.png') no-repeat center center;*/
+/*}*/
+
+/* Контейнер для всех блоков */
+section.course_page ul {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr); /* 4 колонки */
+    gap: 0 44px; /* Отступы между ячейками по горизонтали (32px), по вертикали без отступов */
+    margin: 48px auto 16px auto;
+    width: 80%; /* Ширина контейнера */
+    top: 100px;
+    height: auto; /* Автоматическая высота */
+    justify-items: center;
+    align-items: center;
+}
+
+
+/* Остальные стили остаются без изменений */
+section.course_page ul li {
+    background-color: #D3D3D3; /* Серый фон для всех блоков */
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    font-weight: normal;
+    height: 86px;
+    text-align: center;
+    padding: 8px 20px 8px 8px;
+    color: black;
+    width: 100%; /* Заполняет всю ширину блока */
+    position: relative;
+}
+
+section.course_page ul li.active {
+    background-color: #5B10B3;
+    color: white;
+}
+
+.icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    background-color: transparent;
+    border-radius: 50%;
+}
+
+.start img,
+.finish img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+.box:not(:last-child) {
+    border-right: 2px dotted #9575CD;
+}
+
+.start {
+    grid-column: 1; /* Первая ячейка */
+    display: flex;
+    flex-direction: column; /* Строки располагаться вертикально */
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Отступы сверху и снизу */
+    position: relative;
+}
+
+.start::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-image: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image31.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    margin-bottom: 10px; /* Отступ от картинки к тексту */
+}
+
+.start::after {
+    content: "СТАРТ"; /* Текст */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 17px;
+    color: #9575CD;
+    text-transform: uppercase;
+}
+
+.finish {
+    display: flex;
+    flex-direction: column; /* Строки располагаться вертикально */
+    justify-content: center;
+    align-items: center;
+    margin: 20px 0; /* Отступы сверху и снизу */
+    position: relative;
+}
+
+.finish::before {
+    content: "";
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-image: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image24.png');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    border-radius: 50%;
+    margin-bottom: 10px; /* Отступ от картинки к тексту */
+}
+
+.finish::after {
+    content: "ФИНИШ"; /* Текст */
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 17px;
+    color: #9575CD;
+    text-transform: uppercase;
+}
+
+section.page_route ul {
+    display: grid; /* Сетка для элементов внутри ul */
+    grid-template-columns: 1fr; /* Один столбец */
+    grid-gap: 20px; /* Отступы между ячейками */
+    margin: 128px auto 48px auto; /* Отступы сверху, снизу и по бокам */
+    min-width: 611px;
+    max-width: 832px;
+    padding: 0;
+    list-style-type: none; /* Убираем стандартные маркеры списка */
+    width: calc(100% - 96px); /* Учитываем отступы слева и справа */
+}
+
+section.page_route ul li {
+    margin: 0;
+    background-color: #EEE; /* Цвет фона #EEE (rgb(238, 238, 238)) */
+    padding: 12px; /* Отступы внутри ячеек */
+    font-family: 'Roboto', sans-serif;
+    font-size: 20px; /* Размер шрифта */
+    font-weight: normal; /* Вес шрифта regular */
+    color: #000000; /* Черный цвет текста */
+    border-radius: 8px; /* Скругленные углы */
+    min-height: 0 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    display: flex;
+    align-items: center; /* Вертикальное выравнивание */
+    justify-content: left; /* Горизонтальное выравнивание (по центру) */
+}
+
+section.page_twocolumn {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 10px 48px 64px;
+}
+
+/* Контейнер таблицы */
+.table-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 80%;
+    margin-top: 0 !important;
+}
+
+/* Заголовки (h1 и h2) */
+.column-headers {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    padding: 0 16px;
+    box-sizing: content-box;
+    position: relative;
+}
+
+.column-headers div.fullcolumn {
+    width: 100%;
+    text-align: left;
+    position: relative;
+}
+
+.column-headers div {
+    width: 50%;
+    text-align: left;
+    position: relative;
+}
+
+.column-headers .column1 h1 {
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 41px; /* размер шрифта */
+    color: black; /* цвет текста */
+    margin-top: 0 !important;
+    margin-left: 0 !important;
+}
+
+.column-headers .column1 h2 {
+    margin-top: 16px !important;
+    margin-left: 0 !important;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 21px;
+    color: #5B10B3;
+}
+
+.column-headers .column2 h1 {
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 41px; /* размер шрифта */
+    color: black; /* цвет текста */
+    margin-top: 0 !important;
+    margin-left: 24px !important;
+}
+
+.column-headers .column2 h2 {
+    margin-top: 16px !important;
+    margin-left: 24px !important;
+    font-family: Roboto, sans-serif;
+    font-weight: bold;
+    font-size: 21px;
+    color: #5B10B3;
+}
+
+.column-headers h1 {
+    font-size: 26px;
+    font-weight: bold;
+    margin: 0;
+    position: absolute;
+    left: 0;
+}
+
+.column-headers h2 {
+    font-size: 18px;
+    font-weight: normal;
+    color: #8F5FE7;
+    margin: 16px 0 0;
+    position: absolute;
+    left: 0;
+}
+
+/* Смещение таблицы вниз */
+.table-wrapper {
+    margin-top: 150px;
+}
+
+/* Таблица */
+.table-wrapper table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 32px 16px; /* Горизонтальный зазор: 64px, Вертикальный: 16px */
+}
+
+/* PDF-specific fixes */
+@media print {
+    /* Fix for page_route styles */
+    section.page_route ul {
+        display: block !important;
+        margin: 128px auto 48px auto;
+        padding: 0 48px;
+    }
+    
+    section.page_route ul li {
+        display: block !important;
+        margin-bottom: 16px;
+        width: 100%;
+        box-sizing: border-box;
+    }
+    
+    /* Fix for third_page (teacher info) - restore absolute positioning for PDF */
+    section.third_page {
+        position: relative !important;
+        background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image11.png") no-repeat center center !important;
+        background-size: cover !important;
+    }
+    
+    section.third_page .additional-image {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 960px !important;
+        height: 540px !important;
+        z-index: 1 !important;
+    }
+    
+    section.third_page .avatar {
+        position: absolute !important;
+        top: 50% !important;
+        left: 80px !important;
+        width: 277px !important;
+        height: 273px !important;
+        transform: translateY(-50%) !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+        z-index: 10 !important;
+    }
+    
+    section.third_page .avatar img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    section.third_page h1 {
+        position: absolute !important;
+        top: 122px !important;
+        left: 400px !important;
+        width: 388px !important;
+        color: #5B10B3 !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+    }
+    
+    section.third_page h2 {
+        position: absolute !important;
+        top: 170px !important;
+        left: 400px !important;
+        color: black !important;
+        background-color: transparent !important;
+        margin: 0 !important;
+    }
+    
+    section.third_page ul {
+        position: absolute !important;
+        top: 210px !important;
+        left: 400px !important;
+        margin: 0 !important;
+        padding-left: 20px !important;
+    }
+    
+    /* Fix for images being cut off */
+    section.page_image img {
+        max-width: 90% !important;
+        max-height: 380px !important;
+        width: auto !important;
+        height: auto !important;
+        object-fit: contain !important;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        margin: 20px auto !important;
+        display: block !important;
+    }
+    
+    /* Fix for Mermaid diagrams */
+    section.page img[src*="generated/resources/"],
+    section.page img[src*="_vertical.svg"],
+    section.page img[src*="_vertical.png"] {
+        max-height: 380px !important;
+        max-width: 90% !important;
+        width: auto !important;
+        height: auto !important;
+        margin: 20px auto !important;
+        display: block !important;
+        object-fit: contain !important;
+    }
+}
+
+.table-wrapper table thead {
+    display: none;
+}
+
+.table-wrapper table td {
+    background-color: #eeeeee;
+    color: black;
+    font-size: 16px;
+    padding: 8px; /* Изменено на равномерный отступ */
+    margin-right: 32px;
+    border-radius: 12px;
+    text-align: left; /* Выравнивание текста по левому краю */
+    font-family: Roboto, sans-serif;
+    vertical-align: top;
+    border: 1px solid lightgray;
+    max-width: 320px;
+    min-width: 320px;
+    width: 320px;
+}
+
+section.page_section h1 {
+    color: white;
+    position: absolute;
+    top: 117px;
+    left: 56px;
+    width: 775px;
+    height: 200px;
+    font-family: Roboto;
+    font-size: 56px;
+    font-weight: bold;
+}
+
+section.page_section h2 {
+    margin: 0;
+    padding: 0;
+    color: white;
+    position: absolute;
+    top: 420px;
+    left: 56px;
+    width: 775px;
+    height: 200px;
+    font-family: Roboto;
+    font-size: 31px;
+    font-weight: normal;
+}
+
+section.page_section hr {
+    position: absolute;
+    top: 379px; /* 🔹 Смещение по Y */
+    left: 0; /* 🔹 Смещение по X */
+    width: 960px; /* 🔹 Ширина */
+    height: 2px !important; /* 🔹 Высота */
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image5.png") no-repeat center center;
+    background-size: 100% auto; /* 🔹 Растягиваем по ширине, авто высота */
+}
+
+/* Основной контейнер страницы */
+section.page {
+    position: relative; /* Для контекста абсолютного позиционирования внутри */
+    padding: 120px 48px 64px;
+    align-items: flex-start;
+    place-content: flex-start;
+}
+
+section.page button {
+    top: 433px;
+    left: 76px;
+    position: absolute;
+    font-family: Roboto;
+    font-size: 14px;
+    background: #8F5FE7; /* 🔹 Фиолетовый цвет фона */
+    color: white; /* 🔹 Белый текст */
+    font-weight: normal;
+    padding: 8px 20px; /* 🔹 Отступы */
+    border-radius: 8px; /* 🔹 Скругление углов */
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2); /* 🔹 Тень */
+    border: none; /* 🔹 Убираем стандартную границу */
+    cursor: pointer; /* 🔹 Курсор в виде руки */
+    transition: all 0.3s ease-in-out; /* 🔹 Плавные эффекты */
+}
+
+/* 🔥 Эффект при наведении */
+section.page button:hover {
+    background: #7A4DC9; /* 🔹 Чуть темнее при наведении */
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.25);
+}
+
+/* 🔥 Эффект при нажатии */
+section.page button:active {
+    background: #6B3DB0; /* 🔹 Ещё темнее при клике */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    transform: translateY(2px); /* 🔹 Лёгкое смещение вниз */
+}
+
+/* Стиль для обычного текста в <p> */
+section.page p {
+    font-family: Roboto, sans-serif;
+    font-size: 20px; /* Размер шрифта для обычного текста */
+    color: black; /* Цвет текста */
+    text-align: left; /* Выравнивание текста по левому краю */
+    margin: 0; /* Убираем стандартные отступы */
+    padding: 0; /* Убираем отступы */
+}
+
+/* Стиль для pre */
+section.page pre, marp-pre {
+    color: black;
+    background-color: #f0f0f0; /* Серый фон для pre */
+    font-family: 'Roboto Mono', monospace; /* Шрифт Roboto Mono */
+    font-size: 16px !important; /* Принудительный размер шрифта */
+    line-height: 1.1 !important; /* Чуть больше пространства между строками */
+    border-radius: 5px; /* Скругление углов */
+}
+
+/* Стиль для маркированных списков */
+section.page ul {
+    list-style-type: none; /* Убираем стандартные маркеры */
+    padding: 0; /* Убираем отступы */
+    line-height: 115%;
+    margin-top: 16px;
+}
+
+section.page ul li {
+    position: relative;
+    padding-left: 16px; /* Отступ для текста */
+    font-family: Roboto, sans-serif;
+    font-size: 18px; /* Размер шрифта для маркированного списка */
+    color: black;
+}
+
+section.page ul li::before {
+    content: '\2022'; /* Добавляем фиолетовую точку */
+    position: absolute;
+    left: 0;
+    color: #5B10B3; /* Цвет фиолетовой точки */
+    font-size: 24px; /* Размер точки */
+    align-self: flex-start; /* Выравниваем сам маркер */
+}
+
+section.page ul ul {
+    line-height: 120%;
+}
+
+/* Стиль для вложенных маркированных списков */
+section.page ul ul li {
+    margin-left: 16px;
+    font-size: 18px; /* Размер шрифта для вложенных списков */
+    padding-left: 16px; /* Отступ в 32px больше */
+}
+
+section.page ul ul li::before {
+    font-size: 18px; /* Размер точки для вложенных списков */
+}
+
+/* Стиль для нумерованных списков */
+section.page ol {
+    list-style-type: none; /* Убираем стандартные номера */
+    padding: 0; /* Убираем отступы */
+    line-height: 140%;
+}
+
+section.page ol li {
+    position: relative;
+    padding-left: 24px; /* Отступ для текста */
+    font-family: Roboto, sans-serif;
+    font-size: 18px; /* Размер шрифта для нумерованного списка */
+    color: black;
+    vertical-align: top;
+}
+
+section.page ol li::before {
+    content: counter(list-item) '. '; /* Добавляем фиолетовый номер */
+    position: absolute;
+    left: 0;
+    top: 0;
+    color: #5B10B3; /* Цвет фиолетового числа */
+    font-size: 16px; /* Размер числа */
+}
+
+/* Стиль для вложенных нумерованных списков */
+section.page ol ol li {
+    font-size: 12px; /* Размер шрифта для вложенных нумерованных списков */
+    padding-left: 56px; /* Отступ в 32px больше */
+}
+
+section.page ol ol li::before {
+    font-size: 16px; /* Размер числа для вложенных списков */
+}
+
+section.page_with_image img {
+    position: absolute;
+    left: 496px;
+    right: 48px;
+    top: 112px; /* Исправлено для корректного отображения при наличии ul */
+    max-width: 416px; /* 960 - 496 - 48 = 416 */
+    max-height: 380px;
+    width: auto;
+    height: auto; /* Сохраняем пропорции */
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+section.page_with_qimage img {
+    position: absolute;
+    left: 736px;
+    right: 38px;
+    top: 112px; /* Исправлено для корректного отображения */
+    max-width: 186px; /* 960 - 736 - 38 = 186 */
+    max-height: 380px;
+    width: auto;
+    height: auto; /* Сохраняем пропорции */
+    object-fit: contain;
+    align-self: flex-start;
+}
+
+a {
+    color: #5B10B3; /* Фиолетовый цвет текста */
+    text-decoration: none; /* Убираем стандартное подчеркивание */
+    border-bottom: 2px dotted #5B10B3; /* Подчеркивание точками */
+    transition: all 0.3s ease; /* Плавное изменение при наведении */
+}
+
+/* Стиль при наведении на ссылку */
+a:hover {
+    color: #9c4fb8; /* Светлый фиолетовый цвет при наведении */
+    border-bottom: 2px solid #9c4fb8; /* Изменение на сплошную линию при наведении */
+}
+
+section.page_question h1 {
+    position: absolute;
+    top: 117px;
+    left: 56px;
+    width: 775px;
+    height: 200px;
+    font-family: Roboto, serif;
+    font-size: 56px;
+    font-weight: bold;
+    color: white;
+}
+
+section.page_question hr {
+    position: absolute;
+    top: 379px; /* 🔹 Смещение по Y */
+    left: 0; /* 🔹 Смещение по X */
+    width: 960px; /* 🔹 Ширина */
+    height: 2px !important; /* 🔹 Высота */
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image5.png") no-repeat center center;
+    background-size: 100% auto; /* 🔹 Растягиваем по ширине, авто высота */
+}
+
+section.page_question img {
+    position: absolute;
+    top: 320px;
+    left: 120px;
+    width: 600px;
+    background: url("questions.png") no-repeat center center;
+}
+
+section.page_final {
+    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image36.png") no-repeat center center;
+    background-size: cover;
+}
+
+section.page_final h1 {
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    font-size: 39px; /* Размер шрифта */
+    color: white; /* Цвет текста */
+    position: absolute;
+    top: 157px; /* Позиция по вертикали */
+    left: 67px; /* Позиция по горизонтали */
+    width: 794px; /* Ширина */
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+/* Стиль для заголовка h4 */
+section.page_final h4 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px; /* Переведенный размер шрифта */
+    font-weight: normal;
+    position: absolute;
+    top: 442px; /* Позиция по вертикали */
+    left: 137px; /* Позиция по горизонтали */
+    width: 200px;
+    padding-left: 40px; /* Отступ слева для текста */
+    line-height: 1.4; /* Межстрочный интервал */
+    margin: 0; /* Убираем отступы */
+}
+
+section.page_final h4::before {
+    content: '';
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image42.png') no-repeat center center;
+    background-size: cover;
+    width: 29px;
+    height: 29px;
+    position: absolute;
+    left: 0; /* Иконка будет слева от текста */
+    top: 0; /* Иконка будет выровнена по верхнему краю */
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+/* Стиль для заголовка h5 */
+section.page_final h5 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px; /* Переведенный размер шрифта */
+    font-weight: normal;
+    position: absolute;
+    top: 442px; /* Позиция по вертикали */
+    left: 421px; /* Позиция по горизонтали */
+    width: 180px;
+    padding-left: 45px; /* Отступ слева для текста */
+    line-height: 1.4;
+    margin: 0; /* Убираем отступы */
+}
+
+section.page_final h5::before {
+    content: '';
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image40.png') no-repeat center center;
+    background-size: cover;
+    width: 36px;
+    height: 36px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+/* Стиль для заголовка h6 */
+section.page_final h6 {
+    font-family: 'Roboto', sans-serif;
+    font-size: 15px; /* Переведенный размер шрифта */
+    font-weight: normal;
+    position: absolute;
+    top: 442px; /* Позиция по вертикали */
+    left: 670px; /* Позиция по горизонтали */
+    width: 180px;
+    line-height: 1.4;
+    margin: 0; /* Убираем отступы */
+    /* Убираем внутренние отступы */
+    padding: 0 0 0 32px;
+    color: white;
+}
+
+section.page_final h6::before {
+    content: '';
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image39.png') no-repeat center center;
+    background-size: cover;
+
+    width: 31px;
+    height: 31px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin: 0; /* Убираем отступы */
+    padding: 0; /* Убираем внутренние отступы */
+}
+
+section.page_image {
+    position: relative;
+    padding-top: 120px; /* Отступ сверху */
+    padding-bottom: 64px; /* Отступ снизу */
+    overflow: hidden; /* Скрываем части изображения, если оно выходит за пределы */
+}
+
+section.page_image h1 {
+    z-index: 10;
+}
+
+section.page_image img {
+    position: absolute;
+    top: 128px;
+    left: 32px;
+    right: 32px;
+    margin: auto;
+    bottom: 32px; /* Убираем отступы снизу */
+    width: auto; /* Растягиваем изображение по ширине */
+    max-height: 338px; /* Ограничиваем максимальной высотой */
+    object-fit: contain; /* Масштабируем изображение, сохраняя пропорции без обрезки */
+    max-width: 896px; /* Ограничиваем максимальной шириной (960 - 32*2) */
+}
+
+li::marker {
+    vertical-align: top; /* Принудительно выравниваем точку сверху */
+}
+
+strong, b {
+    display: inline;
+    white-space: normal;
+}
+
+/* Таблицы внутри section.page */
+section.page table {
+    border-collapse: collapse;
+    width: 100%;
+}
+
+section.page th {
+    background-color: #9575CD; /* Фиолетовый */
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 8px;
+    text-align: left;
+}
+
+section.page td {
+    background-color: white;
+    color: black;
+    font-size: 16px;
+    padding: 8px;
+    border: 1px solid #ddd; /* Светлая граница */
+}
+
+section.page_twocolumn .column1,
+section.page_twocolumn .column2 {
+    color: black;
+}
+
+/* New styles for page_with_image and page_with_qimage */
+section.page_with_image,
+section.page_with_qimage {
+    position: relative;
+    padding: 120px 48px 64px;
+    align-items: flex-start;
+    place-content: flex-start;
+}
+
+/* Ограничение ширины текста внутри page_with_image */
+section.page_with_image p,
+section.page_with_image ul,
+section.page_with_image ol,
+section.page_with_image pre {
+    max-width: 440px; /* Половина экрана с учетом отступов */
+}
+
+/* Ограничение ширины текста внутри page_with_qimage */
+section.page_with_qimage p,
+section.page_with_qimage ul,
+section.page_with_qimage ol,
+section.page_with_qimage pre {
+    max-width: 728px; /* Ширина для page_with_qimage */
+}
+
+/* Общий стиль для текста и списков, как в section.page */
+section.page_with_image p,
+section.page_with_qimage p {
+    font-family: Roboto, sans-serif;
+    font-size: 20px;
+    color: black;
+    text-align: left;
+    margin: 0;
+    padding: 0;
+}
+
+section.page_with_image pre,
+section.page_with_qimage pre {
+    color: black;
+    background-color: #f0f0f0;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 16px !important;
+    line-height: 1.1 !important;
+    border-radius: 5px;
+}
+
+section.page_with_image ul,
+section.page_with_qimage ul {
+    list-style-type: none;
+    padding: 0;
+    line-height: 115%;
+    margin-top: 16px;
+}
+
+section.page_with_image ul li,
+section.page_with_qimage ul li {
+    position: relative;
+    padding-left: 16px;
+    font-family: Roboto, sans-serif;
+    font-size: 18px;
+    color: black;
+}
+
+section.page_with_image ul li::before,
+section.page_with_qimage ul li::before {
+    content: '\2022';
+    position: absolute;
+    left: 0;
+    color: #5B10B3;
+    font-size: 24px;
+    align-self: flex-start;
+}
+
+section.page_with_image ol,
+section.page_with_qimage ol {
+    list-style-type: none;
+    padding: 0;
+    line-height: 140%;
+}
+
+section.page_with_image ol li,
+section.page_with_qimage ol li {
+    position: relative;
+    padding-left: 24px;
+    font-family: Roboto, sans-serif;
+    font-size: 14px;
+    color: black;
+}
+
+section.page_with_image ol li::before,
+section.page_with_qimage ol li::before {
+    content: counter(list-item) '. ';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #5B10B3;
+    font-size: 16px;
+}
+
+section.page ol {
+  counter-reset: list-item; /* ← Это заводит счётчик */
+}
+
+section.page ol li {
+  counter-increment: list-item; /* ← Это увеличивает счётчик */
+}
+
+/* НО! Вложенный ul тоже внутри ol, и поэтому он унаследует counter! Надо это остановить: */
+section.page ol ul {
+  counter-reset: none; /* ← Не сбрасывать ничего */
+}
+
+section.page ol ul li::before {
+  content: '\2022'; /* Маркер вместо цифры */
+  counter-increment: none; /* ← Не трогаем счётчик */
+}
+
+/* PDF-specific fixes - updated */
+@media print {
+    /* Fix for third_page - ensure all elements are visible */
+    section.third_page .additional-image {
+        position: absolute !important;
+        top: 0 !important;
+        left: 0 !important;
+        width: 960px !important;
+        height: 540px !important;
+        z-index: 1 !important;
+    }
+    
+    section.third_page .avatar {
+        position: absolute !important;
+        top: 50% !important;
+        left: 80px !important;
+        width: 277px !important;
+        height: 273px !important;
+        transform: translateY(-50%) !important;
+        z-index: 10 !important;
+        border-radius: 50% !important;
+        overflow: hidden !important;
+    }
+    
+    section.third_page .avatar img {
+        width: 100% !important;
+        height: 100% !important;
+        object-fit: cover !important;
+    }
+    
+    section.third_page h1 {
+        position: absolute !important;
+        top: 122px !important;
+        left: 400px !important;
+        z-index: 10 !important;
+    }
+    
+    section.third_page h2 {
+        position: absolute !important;
+        top: 170px !important;
+        left: 400px !important;
+        z-index: 10 !important;
+    }
+    
+    section.third_page ul {
+        position: absolute !important;
+        top: 210px !important;
+        left: 400px !important;
+        z-index: 10 !important;
+    }
+    
+    /* Fix for images - ensure they scale properly */
+    section.page_image img {
+        object-fit: contain !important;
+        max-width: 90% !important;
+        max-height: 380px !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    
+    section.page img[src*="resources/"] {
+        object-fit: contain !important;
+        max-width: 90% !important;
+        max-height: 350px !important;
+        width: auto !important;
+        height: auto !important;
+    }
+    
+    /* Увеличиваем размер диаграмм в PDF */
+    section.page img[src*="_diagram_"] {
+        max-height: 460px !important;
+        top: calc(50% + 15px) !important;
+    }
+    
+    section.page img[src*="_vertical"] {
+        max-height: 480px !important;
+    }
+}
+
+/* ========================================
+ * AUTO-SCALING FOR CODE BLOCKS
+ * ========================================
+ * Automatic font scaling for code blocks based on line count
+ * Applied when slides have code-scale-XX class
+ */
+
+/* Default code styles - ensure proper overflow handling */
+section pre {
+  overflow: visible !important;
+  max-width: 100%;
+  line-height: 1.4;
+}
+
+section pre code {
+  max-width: 100%;
+  word-wrap: break-word;
+  display: block;
+}
+
+/* Auto-scaling for code blocks - атрибутные селекторы для защиты от tree-shaking */
+[class*="code-scale-80"] :is(pre, marp-pre) { font-size: 0.8em !important; }
+[class*="code-scale-75"] :is(pre, marp-pre) { font-size: 0.75em !important; }
+[class*="code-scale-70"] :is(pre, marp-pre) { font-size: 0.7em !important; }
+[class*="code-scale-65"] :is(pre, marp-pre) { font-size: 0.65em !important; }
+[class*="code-scale-60"] :is(pre, marp-pre) { font-size: 0.6em !important; }
+[class*="code-scale-55"] :is(pre, marp-pre) { font-size: 0.55em !important; }
+[class*="code-scale-50"] :is(pre, marp-pre) { font-size: 0.5em !important; }
+[class*="code-scale-45"] :is(pre, marp-pre) { font-size: 0.45em !important; }
+
+/* Apply scaling to code elements as well */
+[class*="code-scale-80"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-75"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-70"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-65"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-60"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-55"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-50"] :is(pre, marp-pre) code { font-size: inherit !important; }
+[class*="code-scale-45"] :is(pre, marp-pre) code { font-size: inherit !important; }
+

@@ -1,0 +1,196 @@
+/***
+ * @theme otusnew-extended-pdf
+ * @size 16:9
+ * @auto-scaling false
+ */
+
+@import 'otusnew-extended';
+
+/* PDF-specific overrides */
+
+/* Fix for third_page - упрощаем позиционирование для PDF */
+section.third_page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+}
+
+section.third_page .additional-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 960px;
+    height: 540px;
+    z-index: 0;
+}
+
+section.third_page .avatar {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    transform: none !important;
+    margin: 20px;
+    z-index: 2;
+    float: left;
+}
+
+section.third_page h1,
+section.third_page h2,
+section.third_page ul {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    z-index: 2;
+    margin-left: 320px;
+}
+
+/* Убираем дублирование div.avatar на third_page */
+section.third_page .avatar + .avatar {
+    display: none !important;
+}
+
+/* Fix for page_route - упрощаем grid для PDF */
+section.page_route ul {
+    display: block !important;
+    margin: 120px 48px 48px 48px;
+}
+
+section.page_route ul li {
+    display: block !important;
+    margin-bottom: 16px;
+    width: auto !important;
+}
+
+/* Fix for page_twocolumn - упрощаем разметку */
+section.page_twocolumn .table-container {
+    display: block !important;
+    position: relative !important;
+    width: 100% !important;
+}
+
+/* Убираем дублирование */
+section.page_twocolumn .table-container + .table-container,
+section.page_twocolumn .column-headers + .column-headers,
+section.page_twocolumn .table-wrapper + .table-wrapper,
+section.page_twocolumn .column1 + .column1,
+section.page_twocolumn .column2 + .column2,
+section.page_twocolumn .fullcolumn + .fullcolumn {
+    display: none !important;
+}
+
+section.page_twocolumn .column-headers div {
+    position: relative !important;
+    display: inline-block !important;
+    width: 45% !important;
+}
+
+/* Убираем абсолютное позиционирование для заголовков */
+section.page_twocolumn h1,
+section.page_twocolumn h2 {
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    margin: 0 !important;
+}
+
+/* Фикс для изображений mermaid */
+section.page img[src*="generated/resources/"] {
+    display: block;
+    margin: 20px auto;
+    max-height: 400px;
+    width: auto;
+}
+
+/* Фикс для пустых строк вокруг диаграмм */
+section.page p:empty {
+    display: none;
+}
+
+/* Убираем лишние отступы */
+section.page {
+    padding-top: 80px !important;
+}
+
+/* Фикс для course_page */
+section.course_page ul {
+    display: block !important;
+}
+
+section.course_page ul li {
+    display: inline-block !important;
+    width: 22% !important;
+    margin: 8px !important;
+}
+
+/* PDF fixes for new page types */
+
+/* Fix for page_image_left/right - simplify layout for PDF */
+section.page_image_left,
+section.page_image_right {
+    display: block !important;
+    padding: 80px 48px 48px 48px !important;
+}
+
+section.page_image_left img,
+section.page_image_right img {
+    position: relative !important;
+    float: left !important;
+    margin: 0 20px 20px 0 !important;
+    max-width: 300px !important;
+    max-height: 300px !important;
+}
+
+section.page_image_right img {
+    float: right !important;
+    margin: 0 0 20px 20px !important;
+}
+
+/* Fix for page_numbered_blocks - simplify for PDF */
+section.page_numbered_blocks p {
+    display: block !important;
+    margin: 16px 0 !important;
+    padding: 20px !important;
+    width: auto !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+}
+
+/* Fix for page_process_steps - simplify for PDF */
+section.page_process_steps p {
+    display: block !important;
+    margin: 16px 0 !important;
+    padding: 20px !important;
+    width: auto !important;
+}
+
+/* Fix for page_two_cases - stack vertically for PDF */
+section.page_two_cases .case-container {
+    display: block !important;
+}
+
+section.page_two_cases .case {
+    display: block !important;
+    width: auto !important;
+    margin: 16px 0 !important;
+}
+
+/* Fix for page_good_bad_example - stack vertically for PDF */
+section.page_good_bad_example .two-blocks {
+    display: block !important;
+}
+
+section.page_good_bad_example .block {
+    display: block !important;
+    width: auto !important;
+    margin: 16px 0 !important;
+}
+
+/* Fix for page_definition - simplify for PDF */
+section.page_definition p::after {
+    display: none !important; /* Hide cursor in PDF */
+}
+
+section.page_definition p {
+    position: relative !important;
+}

@@ -1,0 +1,468 @@
+/***
+ * @theme otus
+ * @size 16:9
+ */
+
+@import 'default';
+
+  @font-face {
+    font-family: "Virgil";
+    src: url("https://excalidraw.com/FG_Virgil.woff2");
+  }
+
+  section {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/background_third.jpg");
+      background-size: cover;
+  }
+
+  p {
+      font-weight: normal;
+      font-family: Roboto;
+  }
+
+  ul, ol {
+      padding-left: 32px;
+  }
+
+  ul li {
+      padding-left: 8px;
+      font-weight: normal;
+      font-family: Roboto;
+      font-size: 90%;
+      list-style-type: "\25B6";
+  }
+
+  ul li::marker {
+      font-weight: normal;
+      font-family: Roboto;
+      font-size: 90%;
+      color: orange;
+  }
+
+  ol li {
+      padding-left: 8px;
+      font-weight: normal;
+      font-family: Roboto;
+      font-size: 90%;
+      padding-left: 16px;
+  }
+
+  ol li::marker {
+      font-weight: normal;
+      font-family: Roboto;
+      font-size: 90%;
+      padding-left: 16px;
+      color: orange;
+  }
+
+  td {
+    font-size: 80%;
+    line-height: 100%;
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+
+  h1 {
+      position: absolute;
+      left: 5%;
+      top: 10%;
+      color: black;
+      font-weight: bold;
+      font-size: 32pt;
+      font-family: Roboto;
+  }
+
+  h2 {
+      position: absolute;
+      left: 5%;
+      top: 15%;
+      color: orange;
+      font-size: 15pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+
+  ol li::marker {
+      color: orange;
+      font-size: 24pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+
+  ol li {
+      color: black;
+      font-size: 24pt;
+      font-weight: normal;
+      font-family: Roboto;
+  }
+
+  section.first_page {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/background.jpg");
+      background-size: cover;
+  }
+
+  section.first_page h1 {
+      position: absolute;
+      top: 35%;
+      width: 50%;
+      padding-left: 5%;
+      color: white;
+      font-size: 56pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+  section.first_page h3 {
+      color: white;
+      font-size: 18pt;
+      font-family: Roboto;
+      position: absolute;
+      bottom: 7%;
+      left: 11%;
+  }
+
+  section.second_page h1 {
+      position: absolute;
+      top: 40%;
+      width: 40%;
+      left: 11%;
+      color: black;
+      font-size: 40pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+  section.second_page img[alt="REC"] {
+      position: absolute;
+      top: 25%;
+      left: 11%;
+      width: 5%;
+      height: 5%;
+  }
+  section.second_page h2 {
+      position: absolute;
+      top: 22%;
+      left: 18%;
+      color: black;
+      font-size: 21pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+
+  section.second_page h3 {
+      position: absolute;
+      top: 67%;
+      left: 18%;
+      width: 27%;
+      color: black;
+      font-size: 18pt;
+      font-weight: normal;
+      font-family: Roboto;
+  }
+
+  section.second_page img[alt="PLUS"] {
+      position: absolute;
+      top: 70%;
+      left: 11%;
+      width: 5%;
+      height: 9%;
+  }
+
+  section.second_page {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/background_third.jpg");
+      background-size: cover;
+  }
+
+  section.question_page h1 {
+      position: absolute;
+      top: 40%;
+      width: 40%;
+      left: 11%;
+      color: white;
+      font-size: 40pt;
+      font-weight: bold;
+      font-family: Roboto;
+  }
+  section.question_page h3 {
+      position: absolute;
+      top: 67%;
+      left: 18%;
+      width: 35%;
+      color: white;
+      font-size: 18pt;
+      font-weight: normal;
+      font-family: Roboto;
+  }
+
+  section.question_page img[alt="PLUS"] {
+      background-color: transparent;
+      position: absolute;
+      display: block;
+      top: 70%;
+      left: 11%;
+      width: 5%;
+      height: 9%;
+  }
+
+  section.question_page {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/section.jpg");
+      background-size: cover;
+  }
+
+  section.third_page h6, section.last_page h6 {
+      position: absolute;
+      left: 5%;
+      top: 10%;
+      color: orange;
+      font-weight: normal;
+      font-family: Roboto;
+      font-size: 15pt;
+  }
+  section.third_page h1, section.last_page h1 {
+      position: absolute;
+      left: 5%;
+      top: 15%;
+      color: black;
+      font-weight: bold;
+      font-size: 32pt;
+      font-family: Roboto;
+  }
+  section.third_page img, section.last_page img {
+      position: absolute;
+      left: 5%;
+      width: 160px;
+      height: 160px;
+      top: 60%;
+      padding-left: 32px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+      background: linear-gradient(90deg, #ffab40 0%, #ffab40 60%, white 60.1%, white 100%);
+  }
+
+  section.third_page h2, section.last_page h2 {
+      font-size: 15pt;
+      font-weight: bold;
+      font-family: Roboto;
+      position: absolute;
+      left: 25%;
+      top: 60%;
+  }
+
+  section.third_page marp-pre, section.last_page marp-pre {
+      position: absolute;
+      left: 25%;
+      top: 70%;
+      background-color: white;
+      border: none;
+      padding: 0;
+  }
+
+  section.third_page marp-pre code, section.last_page marp-pre code {
+      font-weight: normal !important;
+      font-family: Roboto !important;
+  }
+
+  section.third_page, section.last_page {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/background_third.jpg");
+      background-size: cover;
+  }
+
+  section.page_about img {
+      position: absolute;
+      left: 5%;
+      width: 288px;
+      height: 288px;
+      top: 30%;
+      padding-left: 32px;
+      padding-top: 32px;
+      padding-bottom: 32px;
+      background: linear-gradient(90deg, #ffab40 0%, #ffab40 60%, white 60.1%, white 100%);
+  }
+
+  section.page_about h2 {
+      font-size: 16pt;
+      font-weight: bold;
+      font-family: Roboto;
+      position: absolute;
+      left: 35%;
+      top: 32%;
+  }
+
+  section.page_about ul {
+      position: absolute;
+      left: 33%;
+      top: 40%;
+  }
+
+  section.page_about li {
+      font-size: 14pt;
+      font-family: Roboto;
+      font-weight: normal;
+      line-height: 1.8;
+  }
+
+  section.page_rules {
+      background-image: url(https://raw.githubusercontent.com/dzolotov/otus/main/theme/rules.png);
+      background-size: cover;
+  }
+
+  section.page_route ul {
+      padding-top: 64px;
+      padding-left: 8px;
+  }
+  section.page_route li {
+      background-color: #ffd966;
+      list-style-type: none;
+      padding-top: 8px;
+      padding-bottom: 8px;
+      padding-left: 16px;
+      margin-top: 32px;
+      margin-bottom: 32px;
+      font-size: 18pt;
+      font-family: Roboto;
+      font-weight: normal;
+      width: 50%;
+  }
+
+  section.page_section {
+      background-image: url("https://raw.githubusercontent.com/dzolotov/otus/main/theme/section.jpg");
+      background-size: cover;
+  }
+
+  section.page_section h1 {
+      color: white;
+      font-size: 49pt;
+      font-family: Roboto;
+      font-weight: 900;
+      position: absolute;
+      top: 45%;
+      left: 7%;
+      right: 7%
+  }
+
+  section.page_withimage {
+      padding-right: 50%;
+  }
+
+  section.page_withimage img {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      width: 50%;
+      margin-top: auto;
+      margin-bottom: auto;
+  }
+
+  section.page_withqimage {
+      padding-right: 25%;
+  }
+
+  section.page_withqimage img {
+      position: absolute;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      left: 75%;
+      width: 25%;
+      margin-top: auto;
+      margin-bottom: auto;
+      margin-left: auto;
+      margin-right: auto;
+  }
+
+  section.page_image img {
+      position: absolute;
+      height: 480px;
+      position: absolute;
+      top: 128px;
+      left: 0px;
+      right: 0px;
+      bottom: 0px;
+      margin-left: auto;
+      margin-right: auto;        
+      margin-top: auto;
+      margin-bottom: auto;
+  }
+
+  section.page_reflexion {
+      background-image: url(https://raw.githubusercontent.com/dzolotov/otus/main/theme/reflexion.png);
+      background-size: cover;
+  }
+
+  section.next_webinar_page img[alt="academy"] {
+      position: absolute;
+      left: 8%;
+      top: 35%;
+      width: 96px;
+      height: 96px;
+  }
+  section.next_webinar_page img[alt="check1"] {
+      position: absolute;
+      left: 8%;
+      top: 75%;
+      width: 48px;
+      height: 48px;
+  }
+  section.next_webinar_page img[alt="check2"] {
+      position: absolute;
+      left: 35%;
+      top: 75%;
+      width: 48px;
+      height: 48px;
+  }
+  section.next_webinar_page img[alt="redflag"] {
+      position: absolute;
+      left: 65%;
+      top: 75%;
+      width: 48px;
+      height: 48px;
+  }
+  section.next_webinar_page h3 {
+      position: absolute;
+      left: 20%;
+      top: 32%;
+      color: orange;
+      font-family: Roboto;
+      font-weight: normal;
+      font-size: 20pt;
+  }
+  section.next_webinar_page h2 {
+      position: absolute;
+      left: 20%;
+      top: 38%;
+      color: black;
+      font-family: Roboto;
+      font-weight: bold;
+      font-size: 32pt;
+  }
+  section.next_webinar_page h4 {
+      font-family: Roboto;
+      font-weight: normal;
+      font-size: 19pt;
+      position: absolute;
+      left: 13%;
+      top: 72.5%;
+      width: 20%;
+      color: black;
+  }
+  section.next_webinar_page h5 {
+      font-family: Roboto;
+      font-weight: normal;
+      font-size: 19pt;
+      position: absolute;
+      left: 40%;
+      top: 72.5%;
+      width: 20%;
+      color: black;
+  }
+  section.next_webinar_page h6 {
+      font-family: Roboto;
+      font-weight: normal;
+      font-size: 19pt;
+      position: absolute;
+      left: 70%;
+      top: 72.5%;
+      width: 23%;
+      color: black;
+  }
+
