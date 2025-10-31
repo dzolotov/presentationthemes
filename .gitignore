@@ -34,5 +34,10 @@ Thumbs.db
 package-lock.json
 yarn.lock
 
+# Archive files
+*.zip
+*.tar.gz
+*.rar
+
 # Log files
 *.log
