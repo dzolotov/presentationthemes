@@ -223,7 +223,7 @@ section.second_page h5 {
     background-size: contain; /* 🔹 Масштабируем в квадрат */
 }
 
-section.second_page, section.third_page, section.page_rules, section.course_page, section.page_route, section.page_twocolumn, section.page, section.page_image, section.page_with_qimage, section.page_image_left, section.page_image_right, section.page_process_steps {
+section.second_page, section.third_page, section.page_rules, section.course_page, section.page_route, section.page_twocolumn, section.page, section.page_image, section.page_fullscreen_image, section.page_with_qimage, section.page_image_left, section.page_image_right, section.page_image_top, section.page_image_bottom, section.page_process_steps {
     background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image11.png") no-repeat center center;
     background-size: cover;
     position: relative;
@@ -447,6 +447,8 @@ h1 {
     color: black; /* цвет текста */
     padding: 0 !important;
     margin: 0 !important;
+    max-width: 860px; /* ограничение ширины: 960px - 60px (left) - 40px (right margin) */
+    word-wrap: break-word; /* перенос длинных слов */
 }
 
 h2 {
@@ -937,7 +939,9 @@ section.page button:active {
 /* Стиль для обычного текста в <p> */
 section.page p,
 section.page_image_left p,
-section.page_image_right p {
+section.page_image_right p,
+section.page_image_top p,
+section.page_image_bottom p {
     font-family: Roboto, sans-serif;
     font-size: 18px; /* Размер шрифта для обычного текста */
     color: black; /* Цвет текста */
@@ -949,7 +953,9 @@ section.page_image_right p {
 /* Убираем отступ у последнего параграфа */
 section.page p:last-child,
 section.page_image_left p:last-child,
-section.page_image_right p:last-child {
+section.page_image_right p:last-child,
+section.page_image_top p:last-child,
+section.page_image_bottom p:last-child {
     margin-bottom: 0;
 }
 
@@ -959,7 +965,11 @@ section.page p + ol,
 section.page_image_left p + ul,
 section.page_image_left p + ol,
 section.page_image_right p + ul,
-section.page_image_right p + ol {
+section.page_image_right p + ol,
+section.page_image_top p + ul,
+section.page_image_top p + ol,
+section.page_image_bottom p + ul,
+section.page_image_bottom p + ol {
     margin-top: 2px !important; /* Вместо 8px делаем 2px */
 }
 
@@ -976,7 +986,9 @@ section.page pre, marp-pre {
 /* Стиль для маркированных списков */
 section.page ul,
 section.page_image_left ul,
-section.page_image_right ul {
+section.page_image_right ul,
+section.page_image_top ul,
+section.page_image_bottom ul {
     list-style-type: none; /* Убираем стандартные маркеры */
     padding: 0; /* Убираем отступы */
     line-height: 115%;
@@ -1242,16 +1254,12 @@ section.page_image h1 {
 }
 
 section.page_image img {
-    position: absolute;
-    top: 128px;
-    left: 32px;
-    right: 32px;
-    margin: auto;
-    bottom: 32px; /* Убираем отступы снизу */
-    width: auto; /* Растягиваем изображение по ширине */
-    max-height: 338px; /* Ограничиваем максимальной высотой */
-    object-fit: contain; /* Масштабируем изображение, сохраняя пропорции без обрезки */
-    max-width: 896px; /* Ограничиваем максимальной шириной (960 - 32*2) */
+    display: block;
+    margin: 20px auto;
+    width: auto;
+    max-height: 400px;
+    max-width: 90%;
+    object-fit: contain;
 }
 
 li::marker {
@@ -1571,6 +1579,7 @@ section.page h2 {
 section.page_image h2 {
     font-size: 24px;
     padding: 0;
+    margin: 0 60px 16px 60px;
 }
 
 /* Специфичные стили для page_with_qimage */
@@ -2205,24 +2214,28 @@ section.page_image_left {
 /* Заголовок страницы */
 section.page_image_left h1 {
     position: absolute !important;
-    top: 20px !important;
+    top: 10px !important;
     left: 60px !important;
+    right: 32px !important;
+    height: 50px !important;
     font-size: 41px !important;
     font-weight: bold !important;
     color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: auto !important;
 }
 
 /* Изображение слева */
-section.page_image_left img {
+section.page_image_left img:not(.emoji) {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     left: 60px !important;
-    width: 300px !important;
+    width: 350px !important;
     height: auto !important;
     object-fit: cover !important;
     border-radius: 16px !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Специальные стили для Mermaid диаграмм в page_image_left */
@@ -2230,25 +2243,25 @@ section.page_image_left img[src*="generated/resources/"],
 section.page_image_left img[src*="_vertical.svg"],
 section.page_image_left img[src*="_vertical.png"] {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     left: 60px !important;
-    width: 400px !important;
+    width: 350px !important;
     height: auto !important;
-    max-height: 380px !important;
     object-fit: contain !important;
     border-radius: 0 !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Стили для div с изображениями */
-section.page_image_left div:has(img) img {
+section.page_image_left div:has(img) img:not(.emoji) {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     left: 60px !important;
-    width: 400px !important;
+    width: 350px !important;
     height: auto !important;
-    max-height: 380px !important;
     object-fit: contain !important;
     border-radius: 0 !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Текст справа */
@@ -2256,14 +2269,29 @@ section.page_image_left p,
 section.page_image_left ul,
 section.page_image_left ol,
 section.page_image_left pre {
-    width: 400px !important;
-    margin-left: 520px !important;
+    width: 464px !important;
+    margin-left: 420px !important;
+    margin-right: 16px !important;
+    line-height: 1.4 !important;
+}
+
+/* Увеличенный margin-bottom для параграфов с жирным текстом */
+section.page_image_left p:has(strong),
+section.page_image_left p:has(b) {
+    margin-bottom: 25px !important;
+}
+
+
+/* Отступ для списков после параграфов */
+section.page_image_left p + ul,
+section.page_image_left p + ol {
+    margin-top: 40px !important;
 }
 
 /* Позиционируем первый текстовый элемент правильно под заголовком */
 section.page_image_left p:not(:has(img)):first-of-type {
-    margin-top: 0 !important;
-    padding-top: 20px !important;
+    margin-top: 70px !important;
+    padding-top: 0 !important;
 }
 
 /* Убираем параграфы и div с изображениями из потока документа */
@@ -2291,22 +2319,25 @@ section.page_image_right h1 {
     position: absolute !important;
     top: 20px !important;
     left: 60px !important;
+    right: 32px !important;
     font-size: 41px !important;
     font-weight: bold !important;
     color: #000 !important;
     margin: 0 !important;
     padding: 0 !important;
+    width: auto !important;
 }
 
 /* Изображение справа */
-section.page_image_right img {
+section.page_image_right img:not(.emoji) {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     right: 60px !important;
-    width: 300px !important;
+    width: 350px !important;
     height: auto !important;
     object-fit: cover !important;
     border-radius: 16px !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Специальные стили для Mermaid диаграмм в page_image_right */
@@ -2314,25 +2345,25 @@ section.page_image_right img[src*="generated/resources/"],
 section.page_image_right img[src*="_vertical.svg"],
 section.page_image_right img[src*="_vertical.png"] {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     right: 60px !important;
-    width: 400px !important;
+    width: 350px !important;
     height: auto !important;
-    max-height: 380px !important;
     object-fit: contain !important;
     border-radius: 0 !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Стили для div с изображениями */
-section.page_image_right div:has(img) img {
+section.page_image_right div:has(img) img:not(.emoji) {
     position: absolute !important;
-    top: 80px !important;
+    top: 50% !important;
     right: 60px !important;
-    width: 400px !important;
+    width: 350px !important;
     height: auto !important;
-    max-height: 380px !important;
     object-fit: contain !important;
     border-radius: 0 !important;
+    transform: translateY(-50%) !important;
 }
 
 /* Текст слева */
@@ -2340,14 +2371,28 @@ section.page_image_right p,
 section.page_image_right ul,
 section.page_image_right ol,
 section.page_image_right pre {
-    width: 400px !important;
-    margin-right: 520px !important;
+    width: 464px !important;
+    margin-right: 420px !important;
+    margin-left: 16px !important;
+    line-height: 1.4 !important;
+}
+
+/* Увеличенный margin-bottom для параграфов с жирным текстом */
+section.page_image_right p:has(strong),
+section.page_image_right p:has(b) {
+    margin-bottom: 25px !important;
+}
+
+/* Отступ для списков после параграфов */
+section.page_image_right p + ul,
+section.page_image_right p + ol {
+    margin-top: 40px !important;
 }
 
 /* Позиционируем первый текстовый элемент правильно под заголовком */
 section.page_image_right p:not(:has(img)):first-of-type {
-    margin-top: 0 !important;
-    padding-top: 20px !important;
+    margin-top: 70px !important;
+    padding-top: 0 !important;
 }
 
 /* Убираем параграфы и div с изображениями из потока документа */
@@ -2362,6 +2407,148 @@ section.page_image_right div:has(img) {
 /* Стили для параграфов теперь единые для всех классов - см. выше */
 
 /* Стили для кода теперь единые для всех классов - см. выше */
+
+/*
+   ================================================
+   PAGE_IMAGE_TOP - Изображение сверху, текст снизу
+   ================================================
+*/
+
+/* Основной контейнер */
+section.page_image_top {
+    color: #000 !important;
+    padding: 80px 60px 16px 60px !important;
+}
+
+/* Заголовок страницы */
+section.page_image_top h1 {
+    position: absolute !important;
+    top: 20px !important;
+    left: 60px !important;
+    font-size: 41px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Изображение сверху */
+section.page_image_top img {
+    position: absolute !important;
+    top: 80px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 16px !important;
+}
+
+/* Специальные стили для Mermaid диаграмм в page_image_top */
+section.page_image_top img[src*="generated/resources/"],
+section.page_image_top img[src*="_vertical.svg"],
+section.page_image_top img[src*="_vertical.png"] {
+    position: absolute !important;
+    top: 80px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+}
+
+/* Стили для div с изображениями */
+section.page_image_top div:has(img) img {
+    position: absolute !important;
+    top: 80px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+}
+
+/* Убираем параграфы и div с изображениями из потока документа */
+section.page_image_top p:has(img),
+section.page_image_top div:has(img) {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
+
+/*
+   ================================================
+   PAGE_IMAGE_BOTTOM - Текст сверху, изображение снизу
+   ================================================
+*/
+
+/* Основной контейнер */
+section.page_image_bottom {
+    color: #000 !important;
+    padding: 80px 60px 16px 60px !important;
+}
+
+/* Заголовок страницы */
+section.page_image_bottom h1 {
+    position: absolute !important;
+    top: 20px !important;
+    left: 60px !important;
+    font-size: 41px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Изображение снизу */
+section.page_image_bottom img {
+    position: absolute !important;
+    bottom: 16px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 16px !important;
+}
+
+/* Специальные стили для Mermaid диаграмм в page_image_bottom */
+section.page_image_bottom img[src*="generated/resources/"],
+section.page_image_bottom img[src*="_vertical.svg"],
+section.page_image_bottom img[src*="_vertical.png"] {
+    position: absolute !important;
+    bottom: 16px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+}
+
+/* Стили для div с изображениями */
+section.page_image_bottom div:has(img) img {
+    position: absolute !important;
+    bottom: 16px !important;
+    left: 60px !important;
+    right: 60px !important;
+    width: calc(100% - 120px) !important;
+    height: auto !important;
+    object-fit: contain !important;
+    border-radius: 0 !important;
+}
+
+/* Убираем параграфы и div с изображениями из потока документа */
+section.page_image_bottom p:has(img),
+section.page_image_bottom div:has(img) {
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+}
 
 /* ================================================
    PAGE_CARDS_IMAGE_FOUR - Четыре карточки с изображениями
@@ -2945,6 +3132,99 @@ section.page_two_cases .block pre code {
     border: none !important;
 }
 
+/* Альтернативные классы case-left и case-right для двухколоночного layout */
+section.page_two_cases .case-left,
+section.page_two_cases .case-right {
+    display: inline-block !important;
+    width: calc(50% - 20px) !important;
+    box-sizing: border-box !important;
+    background: linear-gradient(135deg, #ADD8E6 0%, #87CEEB 50%, #4682B4 100%) !important;
+    border-radius: 20px !important;
+    padding: 30px !important;
+    margin: 0 !important;
+    min-height: 280px !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+    position: relative !important;
+    transition: all 0.3s ease !important;
+    vertical-align: top !important;
+}
+
+section.page_two_cases .case-right {
+    background: linear-gradient(135deg, #6495ED 0%, #4169E1 50%, #0000CD 100%) !important;
+    margin-left: 20px !important;
+}
+
+section.page_two_cases .case-left h2,
+section.page_two_cases .case-right h2 {
+    font-size: 28px !important;
+    font-weight: bold !important;
+    color: #000 !important;
+    margin: 0 0 20px 0 !important;
+    padding: 0 !important;
+    line-height: 1.2 !important;
+    position: static !important;
+}
+
+section.page_two_cases .case-left p,
+section.page_two_cases .case-right p {
+    font-size: 18px !important;
+    line-height: 1.5 !important;
+    color: #000 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    background: none !important;
+    width: 100% !important;
+    position: static !important;
+}
+
+section.page_two_cases .case-left:hover,
+section.page_two_cases .case-right:hover {
+    transform: translateY(-8px) !important;
+    box-shadow: 0 12px 24px rgba(0,0,0,0.25) !important;
+}
+
+section.page_two_cases .case-left:hover {
+    background: linear-gradient(135deg, #B6E0F2 0%, #98D8F0 50%, #5B9BD5 100%) !important;
+}
+
+section.page_two_cases .case-right:hover {
+    background: linear-gradient(135deg, #7BA8F7 0%, #5A7EF0 50%, #1E3CDD 100%) !important;
+}
+
+section.page_two_cases .case-left pre,
+section.page_two_cases .case-right pre {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-radius: 8px !important;
+    padding: 12px !important;
+    font-size: 14px !important;
+    font-family: 'Roboto Mono', monospace !important;
+    color: #333 !important;
+    overflow-x: auto !important;
+    margin: 12px 0 !important;
+    border: 1px solid rgba(0,0,0,0.1) !important;
+    box-shadow: inset 0 1px 3px rgba(0,0,0,0.1) !important;
+}
+
+section.page_two_cases .case-left pre code,
+section.page_two_cases .case-right pre code {
+    background: transparent !important;
+    color: #333 !important;
+    font-family: 'Roboto Mono', monospace !important;
+    font-size: 14px !important;
+    padding: 0 !important;
+    border: none !important;
+}
+
+/* Исправляем размер шрифта для списков в two_cases */
+section.page_two_cases li,
+section.page_two_cases .block li,
+section.page_two_cases .case-left li,
+section.page_two_cases .case-right li {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 6px !important;
+}
+
 
 /* ================================================
    PAGE_DEFINITION - Страница с определением и курсором
@@ -3126,4 +3406,41 @@ section.page_good_bad_example .block:nth-of-type(1):hover {
 /* Hover для второго блока */
 section.page_good_bad_example .block:nth-of-type(2):hover {
     background: linear-gradient(135deg, #FFC0CB 0%, #FF99B5 50%, #FF7799 100%) !important;
+}
+
+/* Исправляем размер шрифта для списков в good_bad_example */
+section.page_good_bad_example li,
+section.page_good_bad_example .block li {
+    font-size: 16px !important;
+    line-height: 1.2 !important;
+    margin-bottom: 6px !important;
+}
+
+/* ============================================================ */
+/* Fullscreen Image - максимальное использование пространства  */
+/* ============================================================ */
+
+section.page_fullscreen_image {
+    position: relative;
+    padding: 48px 48px 48px 48px; /* Минимум 48px со всех сторон */
+}
+
+section.page_fullscreen_image img {
+    position: absolute;
+    top: 48px;
+    left: 48px;
+    right: 48px;
+    bottom: 48px;
+    width: calc(100% - 96px) !important; /* Ширина минус padding */
+    height: calc(100% - 96px) !important; /* Высота минус padding */
+    object-fit: contain !important; /* Сохраняем пропорции, вписываем в границы */
+    margin: 0 !important;
+    display: block !important;
+}
+
+/* Скрываем заголовки для fullscreen */
+section.page_fullscreen_image h1,
+section.page_fullscreen_image h2,
+section.page_fullscreen_image h3 {
+    display: none !important;
 }

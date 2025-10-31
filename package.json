@@ -5,8 +5,8 @@
   "main": "engine.js",
   "dependencies": {
     "@marp-team/marp-core": "^3.9.0",
-    "markdown-it-mermaid": "^0.2.5"
-  },
-  "devDependencies": {}
+    "jsdom": "^27.1.0",
+    "markdown-it-mermaid": "^0.2.5",
+    "sharp": "^0.34.4"
+  }
 }
-

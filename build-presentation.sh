@@ -167,6 +167,11 @@ create_minimap() {
 #minimap .mm-topic.visited .name{
   opacity: 0.8;
 }
+
+/* Ограничиваем ширину заголовков на page_section, чтобы не перекрывались миникартой */
+section.page_section h1 {
+  max-width: 650px !important;
+}
 EOF
 
 
@@ -174,9 +179,23 @@ EOF
     cat > "${generated_dir}/minimap.js" << 'EOF'
 (function(){
   console.log('Minimap script started');
-  const slides = Array.from(document.querySelectorAll('svg.bespoke-marp-slide'));
-  console.log('Found slides:', slides.length);
-  if (!slides.length) return;
+
+  function initMinimap() {
+    // Пробуем разные селекторы для поиска слайдов
+    let slides = Array.from(document.querySelectorAll('svg.bespoke-marp-slide'));
+    if (!slides.length) {
+      slides = Array.from(document.querySelectorAll('svg[data-marpit-svg]'));
+    }
+    if (!slides.length) {
+      slides = Array.from(document.querySelectorAll('section[data-theme]'));
+    }
+    console.log('Found slides:', slides.length);
+    if (!slides.length) return;
+
+    initMinimapLogic(slides);
+  }
+
+  function initMinimapLogic(slides) {
 
   // Врезки создаём один раз, если их нет
   if (!document.getElementById('mm-progressbar')){
@@ -441,12 +460,78 @@ EOF
 
   // Первичная инициализация
   update();
+  } // конец initMinimapLogic
+
+  // Ждем загрузки DOM и повторяем попытки
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initMinimap);
+  } else {
+    initMinimap();
+  }
+
+  // Дополнительная попытка через 500ms для bundle
+  setTimeout(initMinimap, 500);
 })();
 EOF
 
+    # Копируем knowledge-map скрипт из .themes директории и создаем настройки
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    KNOWLEDGE_MAP_SOURCE="${SCRIPT_DIR}/knowledge-map-new.js"
+
+    if [ -f "$KNOWLEDGE_MAP_SOURCE" ]; then
+        # Определяем фоновое изображение для карты знаний
+        local bg_image="resources/image_kubernetes.png"
+
+        # Ищем кастомное изображение в локальном resources
+        if [ -f "resources/knowledge_map_bg.png" ]; then
+            bg_image="resources/knowledge_map_bg.png"
+            echo "   🖼️  Найдено кастомное фоновое изображение: $bg_image"
+        elif [ -f "resources/image_kubernetes.png" ]; then
+            bg_image="resources/image_kubernetes.png"
+            echo "   🖼️  Используется существующее изображение: $bg_image"
+        else
+            # Создаем более качественное фоновое изображение для карты знаний
+            mkdir -p "resources"
+            echo "   🎨 Создаем фоновое изображение для карты знаний"
+
+            # Используем ImageMagick для создания более интересного фона
+            if command -v convert &> /dev/null; then
+                # Создаем изображение с паттерном и градиентом
+                convert -size 1152x580 \
+                    -define gradient:vector="0,0,1152,580" \
+                    gradient:"#0f172a-#1e293b" \
+                    \( -size 1152x580 pattern:hexagons -alpha set -channel A -evaluate set 10% \) \
+                    -compose over -composite \
+                    "resources/image_kubernetes.png" 2>/dev/null || \
+                convert -size 1152x580 \
+                    radial-gradient:"#1e293b-#0f172a" \
+                    "resources/image_kubernetes.png" 2>/dev/null || \
+                convert -size 1152x580 \
+                    gradient:"#1e293b-#0f172a" \
+                    "resources/image_kubernetes.png"
+
+                bg_image="resources/image_kubernetes.png"
+                echo "   ✅ Создано фоновое изображение с градиентом"
+            else
+                # Fallback: простой градиент
+                bg_image="resources/image_default.png"
+                echo "   ⚠️  ImageMagick недоступен, используется простой фон"
+            fi
+        fi
+
+        # Копируем knowledge-map скрипт с настройкой изображения
+        sed "s|imageUrl: 'resources/image_kubernetes.png'|imageUrl: '$bg_image'|" "$KNOWLEDGE_MAP_SOURCE" > "${generated_dir}/knowledge-map-new.js"
+        echo "   📋 Скопирован knowledge-map-new.js из .themes (настроено фоновое изображение: $bg_image)"
+    elif [ -f "knowledge-map-new.js" ]; then
+        cp "knowledge-map-new.js" "${generated_dir}/"
+        echo "   📋 Скопирован knowledge-map-new.js из текущей директории"
+    else
+        echo "   ⚠️  knowledge-map-new.js не найден"
+    fi
+
     # Добавляем ссылки на CSS и JS в HTML файл
     echo "   🔗 Подключаем CSS и JavaScript файлы"
-    sed -i.bak 's|</style></head>|</style><link rel="stylesheet" href="minimap.css"><script src="minimap.js" defer></script></head>|' "$output_file"
+    sed -i.bak 's|</style></head>|</style><link rel="stylesheet" href="minimap.css"><script src="minimap.js" defer></script><script src="knowledge-map-new.js" defer></script></head>|' "$output_file"
     rm -f "${output_file}.bak"
 
     echo "   ✅ Миникарта создана и подключена"
@@ -1235,6 +1320,24 @@ except Exception as e:
             if [ -n "$PRECEDING_IMAGE" ]; then
                 # Если есть предшествующая ссылка, значит это изображение уже было обработано
                 echo "      ⏭️  Найдена предшествующая ссылка: $PRECEDING_IMAGE - изображение уже обработано, пропускаем"
+
+                # НО ВАЖНО: заменяем СОЗДАТЬ на ОБРАБОТАНО чтобы цикл мог продолжиться
+                # И В TEMP_FILE И В INPUT_FILE!
+                CURRENT_LINE_TO_MARK=$(LC_ALL=C.UTF-8 grep -n -F "<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ: ${ORIGINAL_PROMPT}" "$TEMP_FILE" | head -1 | cut -d: -f1)
+                if [ -n "$CURRENT_LINE_TO_MARK" ]; then
+                    LANG=ru_RU.UTF-8 LC_ALL=ru_RU.UTF-8 sed -i.bak "${CURRENT_LINE_TO_MARK}s/СОЗДАТЬ ИЗОБРАЖЕНИЕ/ОБРАБОТАНО ИЗОБРАЖЕНИЕ/" "$TEMP_FILE"
+                    rm -f "$TEMP_FILE.bak"
+                    echo "      ✅ Заменено СОЗДАТЬ на ОБРАБОТАНО в TEMP_FILE для пропуска"
+                fi
+
+                # ТАКЖЕ заменяем в оригинальном файле
+                CURRENT_LINE_ORIG_SKIP=$(LC_ALL=C.UTF-8 grep -n -F "<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ: ${ORIGINAL_PROMPT}" "$INPUT_FILE" | head -1 | cut -d: -f1)
+                if [ -n "$CURRENT_LINE_ORIG_SKIP" ]; then
+                    LANG=ru_RU.UTF-8 LC_ALL=ru_RU.UTF-8 sed -i.bak "${CURRENT_LINE_ORIG_SKIP}s/СОЗДАТЬ ИЗОБРАЖЕНИЕ/ОБРАБОТАНО ИЗОБРАЖЕНИЕ/" "$INPUT_FILE"
+                    rm -f "$INPUT_FILE.bak"
+                    echo "      ✅ Заменено СОЗДАТЬ на ОБРАБОТАНО в INPUT_FILE для пропуска"
+                fi
+
                 continue
             else
                 echo "      📋 Inline ссылка перед комментарием не найдена, используем следующий номер: $IMAGE_COUNTER"
@@ -1410,11 +1513,13 @@ EOF
         # Заменяем СОЗДАТЬ на ОБРАБОТАНО в TEMP_FILE (для корректной работы цикла) и в INPUT_FILE (для сохранения изменений)
         echo "      🔍 Заменяем СОЗДАТЬ на ОБРАБОТАНО в обоих файлах"
 
-        # В TEMP_FILE для прерывания цикла (с правильной локалью для UTF-8)
-        FIRST_LINE_TEMP=$(grep -n '<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
+        # В TEMP_FILE для продолжения цикла (с правильной локалью для UTF-8)
+        # Заменяем текущий промпт (ИМЕННО этот, а не первый попавшийся) на ОБРАБОТАНО в TEMP_FILE
+        FIRST_LINE_TEMP=$(LC_ALL=C.UTF-8 grep -n -F "<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ: ${ORIGINAL_PROMPT}" "$TEMP_FILE" | head -1 | cut -d: -f1)
         if [ -n "$FIRST_LINE_TEMP" ]; then
             LANG=ru_RU.UTF-8 LC_ALL=ru_RU.UTF-8 sed -i.bak "${FIRST_LINE_TEMP}s/СОЗДАТЬ ИЗОБРАЖЕНИЕ/ОБРАБОТАНО ИЗОБРАЖЕНИЕ/" "$TEMP_FILE"
             rm -f "$TEMP_FILE.bak"
+            echo "      ✅ Заменено СОЗДАТЬ на ОБРАБОТАНО в TEMP_FILE (строка ${FIRST_LINE_TEMP})"
         fi
 
         # В INPUT_FILE для сохранения изменений - СНАЧАЛА заменяем, ПОТОМ добавляем изображение
@@ -1470,18 +1575,21 @@ EOF
             rm -f "$TEMP_FILE.bak"
         fi
 
-        # После завершения всех изменений в файле, находим первую строку с ОБРАБОТАНО ИЗОБРАЖЕНИЕ и обрабатываем текст
-        PROCESSED_LINE=$(grep -n '<!-- ОБРАБОТАНО ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
+        # После завершения всех изменений в файле, находим ВСЕ строки с ОБРАБОТАНО ИЗОБРАЖЕНИЕ и обрабатываем текст
         TEXT_APPLIED=false
-        if [ -n "$PROCESSED_LINE" ]; then
-            # Проверяем команды ДОБАВИТЬ ТЕКСТ сразу после промпта этого изображения
-            process_text_overlays_for_current_image "$PROCESSED_LINE"
-            # Проверяем, был ли применен текст (есть ли файл _withtext)
-            WITHTEXT_FILE="${IMAGE_PATH/.png/_withtext.png}"
-            if [ -f "$WITHTEXT_FILE" ]; then
-                TEXT_APPLIED=true
+        while read -r LINE_INFO; do
+            PROCESSED_LINE=$(echo "$LINE_INFO" | cut -d: -f1)
+            if [ -n "$PROCESSED_LINE" ]; then
+                echo "   🔍 Проверяем команды ДОБАВИТЬ ТЕКСТ для строки $PROCESSED_LINE"
+                # Проверяем команды ДОБАВИТЬ ТЕКСТ сразу после промпта этого изображения
+                process_text_overlays_for_current_image "$PROCESSED_LINE"
+                # Проверяем, был ли применен текст (есть ли файл _withtext)
+                WITHTEXT_FILE="${IMAGE_PATH/.png/_withtext.png}"
+                if [ -f "$WITHTEXT_FILE" ]; then
+                    TEXT_APPLIED=true
+                fi
             fi
-        fi
+        done < <(grep -n '<!-- ОБРАБОТАНО ИЗОБРАЖЕНИЕ:' "$TEMP_FILE")
 
         # Устанавливаем правильный путь в зависимости от того, был ли применен текст
         if [ "$TEXT_APPLIED" = true ]; then
@@ -1514,39 +1622,167 @@ fi
 
 # Корректируем пути к изображениям и скриптам только для HTML
 if [[ "$FORMAT" == "html" ]]; then
-    echo -e "${BLUE}🔧 Корректируем пути к изображениям и скриптам для HTML${NC}"
-    
-    # Создаём временный файл для обработки
-    TEMP_SED="${TEMP_FILE}.sed"
-    
-    # Используем perl для более надёжной обработки
-    if command -v perl &> /dev/null; then
-        perl -pe '
-            # Markdown изображения ![alt](path) - БЕЗ SVG и БЕЗ resources/ (SVG и resources остаются как есть для HTML)
-            s/!\[([^\]]*)\]\((?!http|https|\/|\.\.\/|#|resources\/)([^)]+\.(png|jpg|jpeg|gif|webp))\)/![$1](..\/\2)/g;
-            
-            # HTML img теги - БЕЗ SVG и БЕЗ resources/
-            s/src="(?!http|https|\/|\.\.\/|#|resources\/)([^"]+\.(png|jpg|jpeg|gif|webp))"/src="..\/\1"/g;
-            s/src=\x27(?!http|https|\/|\.\.\/|#|resources\/)([^\x27]+\.(png|jpg|jpeg|gif|webp))\x27/src="..\/\1"/g;
-            
-            # JavaScript файлы в script тегах
-            s/src="(?!http|https|\/|\.\.\/|#)([^"]+\.js)"/src="..\/\1"/g;
-            s/src=\x27(?!http|https|\/|\.\.\/|#)([^\x27]+\.js)\x27/src="..\/\1"/g;
-        ' "$TEMP_FILE" > "$TEMP_SED"
+    # НОВАЯ ЛОГИКА: Сканируем файл сверху вниз и собираем все изображения с командами
+    echo -e "${BLUE}✍️ Сканируем файл для поиска изображений и команд наложения текста${NC}"
+
+    if command -v python3 &> /dev/null; then
+        # Массивы для хранения информации об изображениях
+        declare -a IMAGE_PATHS=()
+        declare -a TEXT_COMMANDS=()
+
+        CURRENT_LINE=1
+        TOTAL_LINES=$(wc -l < "$INPUT_FILE")
+        CURRENT_IMAGE_PATH=""
+
+        while [ $CURRENT_LINE -le $TOTAL_LINES ]; do
+            LINE_CONTENT=$(sed -n "${CURRENT_LINE}p" "$INPUT_FILE")
+
+            # Проверяем на ссылку изображения
+            if echo "$LINE_CONTENT" | grep -q "^!\[.*\](.*\.png)"; then
+                CURRENT_IMAGE_PATH=$(echo "$LINE_CONTENT" | sed 's/^!\[.*\](\([^)]*\))/\1/')
+                echo "   🖼️ Найдено изображение на строке $CURRENT_LINE: $CURRENT_IMAGE_PATH"
+
+                # Ищем команды ДОБАВИТЬ ТЕКСТ для этого изображения (в следующих 10 строках)
+                for i in {1..10}; do
+                    CHECK_LINE=$((CURRENT_LINE + i))
+                    if [ $CHECK_LINE -gt $TOTAL_LINES ]; then
+                        break
+                    fi
+
+                    CHECK_CONTENT=$(sed -n "${CHECK_LINE}p" "$INPUT_FILE")
+
+                    # Если встретили следующее изображение - выходим
+                    if echo "$CHECK_CONTENT" | grep -q "^!\[.*\](.*\.png)"; then
+                        break
+                    fi
+
+                    # Если нашли команду ДОБАВИТЬ ТЕКСТ
+                    if echo "$CHECK_CONTENT" | grep -q "<!-- ДОБАВИТЬ ТЕКСТ В"; then
+                        echo "      ✍️ Найдена команда наложения текста на строке $CHECK_LINE"
+
+                        # Парсим команду
+                        X_POS=$(echo "$CHECK_CONTENT" | sed 's/.*(\([^,]*\),.*/\1/' | tr -d ' ')
+                        Y_POS=$(echo "$CHECK_CONTENT" | sed 's/.*,\s*\([^)]*\)).*/\1/' | tr -d ' ')
+                        TEXT_CONTENT=$(echo "$CHECK_CONTENT" | sed 's/.*: *\(.*\) *-->.*/\1/')
+                        FONT_SIZE="72"
+
+                        if echo "$CHECK_CONTENT" | grep -q "РАЗМЕР"; then
+                            FONT_SIZE=$(echo "$CHECK_CONTENT" | sed 's/.*РАЗМЕР \([0-9]*\).*/\1/')
+                            TEXT_CONTENT=$(echo "$CHECK_CONTENT" | sed 's/.*РАЗМЕР [0-9]*: *\(.*\) *-->.*/\1/')
+                        fi
+
+                        echo "         Позиция: ($X_POS, $Y_POS), Текст: '$TEXT_CONTENT', Размер: $FONT_SIZE"
+
+                        # Применяем текст к изображению
+                        if [ -n "$CURRENT_IMAGE_PATH" ]; then
+                            # Определяем полный путь к изображению
+                            if [[ "$CURRENT_IMAGE_PATH" == resources/* ]]; then
+                                # Используем рабочую директорию, а не SCRIPT_DIR
+                                FULL_IMAGE_PATH="$CURRENT_IMAGE_PATH"
+                            else
+                                FULL_IMAGE_PATH="$CURRENT_IMAGE_PATH"
+                            fi
+
+                            if [ -f "$FULL_IMAGE_PATH" ]; then
+                                # Создаем версию с текстом
+                                WITHTEXT_IMAGE="${FULL_IMAGE_PATH%.*}_withtext.png"
+
+                                echo "         🎨 Применяем текст к изображению: $FULL_IMAGE_PATH"
+
+                                # Создаем Python скрипт для наложения текста
+                                python3 << EOF
+from PIL import Image, ImageDraw, ImageFont
+import sys
+
+try:
+    img = Image.open('$FULL_IMAGE_PATH')
+    width, height = img.size
+
+    # Создаем объект для рисования
+    draw = ImageDraw.Draw(img)
+
+    # Пытаемся найти шрифт
+    try:
+        font = ImageFont.truetype('/System/Library/Fonts/Arial.ttf', $FONT_SIZE)
+    except:
+        try:
+            font = ImageFont.truetype('/usr/share/fonts/truetype/liberation/LiberationSans-Bold.ttf', $FONT_SIZE)
+        except:
+            font = ImageFont.load_default()
+
+    # Преобразуем координаты из диапазона [-1, 1] в пиксели
+    x = int((float('$X_POS') + 1) * width / 2)
+    y = int((float('$Y_POS') + 1) * height / 2)
+
+    # Получаем размер текста
+    bbox = draw.textbbox((0, 0), '$TEXT_CONTENT', font=font)
+    text_width = bbox[2] - bbox[0]
+    text_height = bbox[3] - bbox[1]
+
+    # Центрируем текст
+    x = x - text_width // 2
+    y = y - text_height // 2
+
+    # Рисуем текст с контуром
+    outline_width = 3
+    for adj_x in range(-outline_width, outline_width + 1):
+        for adj_y in range(-outline_width, outline_width + 1):
+            if adj_x != 0 or adj_y != 0:
+                draw.text((x + adj_x, y + adj_y), '$TEXT_CONTENT', font=font, fill='black')
+
+    # Рисуем основной текст
+    draw.text((x, y), '$TEXT_CONTENT', font=font, fill='white')
+
+    # Сохраняем с суффиксом _withtext
+    img.save('$WITHTEXT_IMAGE')
+    print(f"✅ Текст наложен: $WITHTEXT_IMAGE")
+
+except Exception as e:
+    print(f"❌ Ошибка: {e}")
+    sys.exit(1)
+EOF
+
+                                # Заменяем ссылку на изображение в файле
+                                if [ -f "$WITHTEXT_IMAGE" ]; then
+                                    WITHTEXT_RELATIVE=$(echo "$WITHTEXT_IMAGE" | sed "s|$SCRIPT_DIR/../||")
+                                    sed -i.bak "${CURRENT_LINE}s|$CURRENT_IMAGE_PATH|$WITHTEXT_RELATIVE|" "$INPUT_FILE"
+                                    rm -f "$INPUT_FILE.bak"
+                                    echo "         ✅ Заменена ссылка на изображение с текстом"
+
+                                    # Заменяем ДОБАВИТЬ на ОБРАБОТАНО
+                                    sed -i.bak "${CHECK_LINE}s/ДОБАВИТЬ ТЕКСТ/ОБРАБОТАНО ТЕКСТ/" "$INPUT_FILE"
+                                    rm -f "$INPUT_FILE.bak"
+                                fi
+                            else
+                                echo "         ⚠️ Файл изображения не найден: $FULL_IMAGE_PATH"
+                            fi
+                        fi
+                        break
+                    fi
+                done
+            fi
+
+            ((CURRENT_LINE++))
+        done
     else
-        # Альтернативный вариант с простой заменой через while read
-        while IFS= read -r line; do
-            # Заменяем простые случаи ![](file.ext) - БЕЗ SVG
-            line=$(echo "$line" | sed -E 's/!\[([^]]*)\]\(([^/:)]+\.(png|jpg|jpeg|gif|webp))\)/![\1](..\/\2)/g')
-            # Заменяем <img src="file.ext"> - БЕЗ SVG
-            line=$(echo "$line" | sed -E 's/src="([^/:"][^/"]+\.(png|jpg|jpeg|gif|webp))"/src="..\/\1"/g')
-            # Заменяем <script src="file.js">
-            line=$(echo "$line" | sed -E 's/src="([^/:"][^/"]+\.js)"/src="..\/\1"/g')
-            echo "$line"
-        done < "$TEMP_FILE" > "$TEMP_SED"
+        echo "   ⚠️ Python3 не найден, пропускаем наложение текста"
     fi
-    
-    mv "$TEMP_SED" "$TEMP_FILE"
+
+    # Копируем новые изображения с текстом в generated/resources
+    echo -e "${BLUE}📋 Копируем изображения с текстом в generated/resources${NC}"
+    if ls resources/*_withtext.png 2>/dev/null | grep -q .; then
+        cp resources/*_withtext.png "$RESOURCES_DIR/" 2>/dev/null
+        echo "   ✅ Скопированы изображения с наложенным текстом"
+    else
+        echo "   ℹ️ Изображения с текстом не найдены"
+    fi
+
+echo -e "${BLUE}🔧 Корректируем пути к изображениям и скриптам для HTML${NC}"
+    echo -e "${BLUE}   Сервер запускается из generated/, пути resources/ остаются как есть${NC}"
+
+    # Для HTML НЕ меняем пути resources/ - они уже правильные для запуска из generated
+    # Сервер запускается из generated/, поэтому resources/ пути корректны
+    echo -e "${BLUE}   Пути не требуют коррекции - сервер запускается из generated${NC}"
 fi
 
 # Для PDF/PPTX заменяем интерактивные элементы на плейсхолдеры
@@ -1694,46 +1930,34 @@ else
     exit 1
 fi
 
-# Определяем параметры для разных форматов
+# Определяем параметры для разных форматов - ИСПОЛЬЗУЕМ ЕДИНЫЙ CSS
 case "$FORMAT" in
     "html")
-        FORMAT_ARGS="--html"
-        THEME_FILE="~/Obsidian/MySecureNotes/.themes/otusnew-extended.css"
+        FORMAT_ARGS="--html --bespoke.osc=false"
         ;;
     "pdf")
         FORMAT_ARGS="--pdf --pdf-notes"
-        THEME_FILE="~/Obsidian/MySecureNotes/.themes/otusnew-extended-pdf.css"
         ;;
     "pptx")
         FORMAT_ARGS="--pptx --pptx-editable"
-        THEME_FILE="~/Obsidian/MySecureNotes/.themes/otusnew-extended.css"
         ;;
 esac
 
+# Единая тема для всех форматов
+THEME_NAME="otusnew-extended"
+
 # Генерируем выходной файл
-if [[ "$FORMAT" == "pdf" ]]; then
-    $MARP_CMD "$TEMP_FILE" \
-        $FORMAT_ARGS \
-        --theme-set ~/Obsidian/MySecureNotes/.themes \
-        --theme otusnew-extended-pdf \
-        --allow-local-files \
-        --no-stdin \
-        -o "$TEMP_OUTPUT_FILE" || {
-        echo -e "${RED}❌ Ошибка при генерации $FORMAT${NC}"
-        exit 1
-    }
-else
-    $MARP_CMD "$TEMP_FILE" \
-        $FORMAT_ARGS \
-        --theme-set ~/Obsidian/MySecureNotes/.themes \
-        --theme otusnew-extended \
-        --allow-local-files \
-        --no-stdin \
-        -o "$TEMP_OUTPUT_FILE" || {
-        echo -e "${RED}❌ Ошибка при генерации $FORMAT${NC}"
-        exit 1
-    }
-fi
+# Используем единый CSS файл для всех форматов
+$MARP_CMD "$TEMP_FILE" \
+    $FORMAT_ARGS \
+    --theme-set ~/Obsidian/MySecureNotes/.themes \
+    --theme otusnew-extended \
+    --allow-local-files \
+    --no-stdin \
+    -o "$TEMP_OUTPUT_FILE" || {
+    echo -e "${RED}❌ Ошибка при генерации $FORMAT${NC}"
+    exit 1
+}
 
 # Перемещаем файл в generated для PDF/PPTX
 if [[ "$FORMAT" == "pdf" ]] || [[ "$FORMAT" == "pptx" ]]; then
@@ -1760,4 +1984,39 @@ if [[ "$FORMAT" == "pptx" ]]; then
     echo "   PNG диаграммы и графики: $RESOURCES_DIR/"
 else
     echo "   SVG диаграммы и PNG графики: $RESOURCES_DIR/"
+fi
+
+# Для HTML формата - запускаем локальный HTTP-сервер и открываем в браузере
+if [[ "$FORMAT" == "html" ]]; then
+    # Определяем порт для HTTP-сервера
+    HTTP_PORT=8888
+
+    # Открываем HTML файл в Comet браузере, переиспользуя вкладку
+    PRESENTATION_NAME=$(basename "$OUTPUT_FILE" .html)
+    echo -e "${BLUE}🚀 Открываем презентацию: $OUTPUT_FILE${NC}"
+
+    # Используем AppleScript для переиспользования вкладки с тем же именем
+    osascript -e "
+    tell application \"Comet\"
+        activate
+        set targetURL to \"file://$(pwd)/$OUTPUT_FILE\"
+        set tabFound to false
+
+        repeat with w in windows
+            repeat with t in tabs of w
+                if name of t contains \"$PRESENTATION_NAME\" then
+                    set URL of t to targetURL
+                    set active tab index of w to index of t
+                    set tabFound to true
+                    exit repeat
+                end if
+            end repeat
+            if tabFound then exit repeat
+        end repeat
+
+        if not tabFound then
+            open location targetURL
+        end if
+    end tell
+    " 2>/dev/null || open -a "Comet" "$OUTPUT_FILE"
 fi
