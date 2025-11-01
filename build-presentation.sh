@@ -478,60 +478,28 @@ EOF
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
     KNOWLEDGE_MAP_SOURCE="${SCRIPT_DIR}/knowledge-map-new.js"
 
-    if [ -f "$KNOWLEDGE_MAP_SOURCE" ]; then
-        # Определяем фоновое изображение для карты знаний
-        local bg_image="resources/image_kubernetes.png"
-
-        # Ищем кастомное изображение в локальном resources
-        if [ -f "resources/knowledge_map_bg.png" ]; then
-            bg_image="resources/knowledge_map_bg.png"
-            echo "   🖼️  Найдено кастомное фоновое изображение: $bg_image"
-        elif [ -f "resources/image_kubernetes.png" ]; then
-            bg_image="resources/image_kubernetes.png"
-            echo "   🖼️  Используется существующее изображение: $bg_image"
-        else
-            # Создаем более качественное фоновое изображение для карты знаний
-            mkdir -p "resources"
-            echo "   🎨 Создаем фоновое изображение для карты знаний"
-
-            # Используем ImageMagick для создания более интересного фона
-            if command -v convert &> /dev/null; then
-                # Создаем изображение с паттерном и градиентом
-                convert -size 1152x580 \
-                    -define gradient:vector="0,0,1152,580" \
-                    gradient:"#0f172a-#1e293b" \
-                    \( -size 1152x580 pattern:hexagons -alpha set -channel A -evaluate set 10% \) \
-                    -compose over -composite \
-                    "resources/image_kubernetes.png" 2>/dev/null || \
-                convert -size 1152x580 \
-                    radial-gradient:"#1e293b-#0f172a" \
-                    "resources/image_kubernetes.png" 2>/dev/null || \
-                convert -size 1152x580 \
-                    gradient:"#1e293b-#0f172a" \
-                    "resources/image_kubernetes.png"
-
-                bg_image="resources/image_kubernetes.png"
-                echo "   ✅ Создано фоновое изображение с градиентом"
-            else
-                # Fallback: простой градиент
-                bg_image="resources/image_default.png"
-                echo "   ⚠️  ImageMagick недоступен, используется простой фон"
-            fi
-        fi
+    # Добавляем карту знаний только если есть кастомный фон
+    if [ -f "$KNOWLEDGE_MAP_SOURCE" ] && [ -f "resources/knowledge_map_bg.png" ]; then
+        echo "   🗺️  Добавляем карту знаний"
+        local bg_image="resources/knowledge_map_bg.png"
+        echo "   🖼️  Используется кастомное фоновое изображение: $bg_image"
 
         # Копируем knowledge-map скрипт с настройкой изображения
         sed "s|imageUrl: 'resources/image_kubernetes.png'|imageUrl: '$bg_image'|" "$KNOWLEDGE_MAP_SOURCE" > "${generated_dir}/knowledge-map-new.js"
         echo "   📋 Скопирован knowledge-map-new.js из .themes (настроено фоновое изображение: $bg_image)"
-    elif [ -f "knowledge-map-new.js" ]; then
-        cp "knowledge-map-new.js" "${generated_dir}/"
-        echo "   📋 Скопирован knowledge-map-new.js из текущей директории"
     else
-        echo "   ⚠️  knowledge-map-new.js не найден"
+        echo "   ℹ️  Карта знаний отключена (нет кастомного фона knowledge_map_bg.png)"
     fi
 
     # Добавляем ссылки на CSS и JS в HTML файл
     echo "   🔗 Подключаем CSS и JavaScript файлы"
-    sed -i.bak 's|</style></head>|</style><link rel="stylesheet" href="minimap.css"><script src="minimap.js" defer></script><script src="knowledge-map-new.js" defer></script></head>|' "$output_file"
+    if [ -f "${generated_dir}/knowledge-map-new.js" ]; then
+        # С картой знаний
+        sed -i.bak 's|</style></head>|</style><link rel="stylesheet" href="minimap.css"><script src="minimap.js" defer></script><script src="knowledge-map-new.js" defer></script></head>|' "$output_file"
+    else
+        # Только миникарта
+        sed -i.bak 's|</style></head>|</style><link rel="stylesheet" href="minimap.css"><script src="minimap.js" defer></script></head>|' "$output_file"
+    fi
     rm -f "${output_file}.bak"
 
     echo "   ✅ Миникарта создана и подключена"
@@ -617,10 +585,17 @@ if [ -d "${INPUT_DIR}/resources" ]; then
         echo "   Скопированы webp файлы"
     fi
     
-    # Копируем png файлы
+    # Копируем png файлы (исключая служебные файлы карты знаний)
     if ls "${INPUT_DIR}"/resources/*.png 2>/dev/null | grep -q .; then
-        cp "${INPUT_DIR}"/resources/*.png "$RESOURCES_DIR/" 2>/dev/null
-        echo "   Скопированы png файлы"
+        # Копируем все png файлы кроме служебных image_kubernetes.png и image_default.png
+        find "${INPUT_DIR}/resources" -name "*.png" ! -name "image_kubernetes.png" ! -name "image_default.png" -exec cp {} "$RESOURCES_DIR/" \; 2>/dev/null
+        echo "   Скопированы png файлы (исключая служебные файлы карты знаний)"
+
+        # Отдельно копируем knowledge_map_bg.png если он есть (для карты знаний)
+        if [ -f "${INPUT_DIR}/resources/knowledge_map_bg.png" ]; then
+            cp "${INPUT_DIR}/resources/knowledge_map_bg.png" "$RESOURCES_DIR/"
+            echo "   ✅ Скопирован кастомный фон карты знаний: knowledge_map_bg.png"
+        fi
     fi
     
     # Копируем jpg/jpeg файлы
