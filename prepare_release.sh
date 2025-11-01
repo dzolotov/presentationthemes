@@ -14,19 +14,111 @@ NC='\033[0m' # No Color
 
 echo -e "${BLUE}🚀 Подготовка релиза презентации${NC}"
 
-# Проверяем аргументы
-if [ $# -eq 0 ]; then
-    echo -e "${RED}❌ Использование: $0 <файл.md>${NC}"
-    echo "   Пример: $0 lecture2.md"
+# Функция показа помощи
+show_help() {
+    echo "Использование: $0 <файл.md> [опции]"
+    echo ""
+    echo "Опции:"
+    echo "  -c, --course НАЗВАНИЕ      Название курса"
+    echo "  -f, --flow ПОТОК           Поток курса (например, 2025-09)"
+    echo "  -n, --number НОМЕР         Номер лекции (например, 10)"
+    echo "  -t, --topic ТЕМА           Краткая тема лекции"
+    echo "  -l, --lesson УРОК          Полное название урока"
+    echo "  -d, --next-date ДАТА       Дата следующего вебинара"
+    echo "  -s, --next-topic ТЕМА      Тема следующего вебинара"
+    echo "  -m, --module МОДУЛЬ        Номер активного модуля"
+    echo "  -h, --help                 Показать эту справку"
+    echo ""
+    echo "Примеры:"
+    echo "  $0 lecture2.md -c \"Postgres Advanced\" -f \"2025-09\" -n \"10\" -t \"Kubernetes2\" -l \"Введение в Kubernetes: Работа с хранилищами данных и конфигурациями\" -d \"11.11.2025\" -s \"Terraform\" -m \"2\""
+    echo ""
+    echo "  $0 lecture2.md  # Интерактивный режим"
+}
+
+# Разбор аргументов командной строки
+INPUT_FILE=""
+COURSE_NAME=""
+FLOW=""
+LECTURE_NUMBER=""
+TOPIC=""
+LESSON_TITLE=""
+NEXT_DATE=""
+NEXT_TOPIC=""
+ACTIVE_MODULE=""
+INTERACTIVE_MODE=true
+
+while [[ $# -gt 0 ]]; do
+    case $1 in
+        -h|--help)
+            show_help
+            exit 0
+            ;;
+        -c|--course)
+            COURSE_NAME="$2"
+            shift 2
+            ;;
+        -f|--flow)
+            FLOW="$2"
+            shift 2
+            ;;
+        -n|--number)
+            LECTURE_NUMBER="$2"
+            shift 2
+            ;;
+        -t|--topic)
+            TOPIC="$2"
+            shift 2
+            ;;
+        -l|--lesson)
+            LESSON_TITLE="$2"
+            shift 2
+            ;;
+        -d|--next-date)
+            NEXT_DATE="$2"
+            shift 2
+            ;;
+        -s|--next-topic)
+            NEXT_TOPIC="$2"
+            shift 2
+            ;;
+        -m|--module)
+            ACTIVE_MODULE="$2"
+            shift 2
+            ;;
+        -*)
+            echo -e "${RED}❌ Неизвестный параметр: $1${NC}"
+            show_help
+            exit 1
+            ;;
+        *)
+            if [ -z "$INPUT_FILE" ]; then
+                INPUT_FILE="$1"
+            else
+                echo -e "${RED}❌ Лишний аргумент: $1${NC}"
+                show_help
+                exit 1
+            fi
+            shift
+            ;;
+    esac
+done
+
+# Проверяем основной аргумент
+if [ -z "$INPUT_FILE" ]; then
+    echo -e "${RED}❌ Не указан входной файл${NC}"
+    show_help
     exit 1
 fi
-
-INPUT_FILE="$1"
 
 # Проверяем существование файла
 if [ ! -f "$INPUT_FILE" ]; then
     echo -e "${RED}❌ Файл $INPUT_FILE не найден в текущем каталоге${NC}"
     exit 1
+fi
+
+# Если заданы все параметры - отключаем интерактивный режим
+if [ -n "$COURSE_NAME" ] && [ -n "$FLOW" ] && [ -n "$LECTURE_NUMBER" ] && [ -n "$TOPIC" ] && [ -n "$LESSON_TITLE" ] && [ -n "$NEXT_DATE" ] && [ -n "$NEXT_TOPIC" ] && [ -n "$ACTIVE_MODULE" ]; then
+    INTERACTIVE_MODE=false
 fi
 
 CURRENT_DIR=$(pwd)
@@ -35,25 +127,64 @@ FILENAME=$(basename "$INPUT_FILE" .md)
 echo -e "${BLUE}📋 Входной файл: $INPUT_FILE${NC}"
 echo -e "${BLUE}📁 Текущий каталог: $CURRENT_DIR${NC}"
 
-# Запрашиваем параметры курса
-echo ""
-echo -e "${YELLOW}📝 Введите параметры курса:${NC}"
-read -p "Название курса (например, 'Kubernetes Advanced'): " COURSE_NAME
-read -p "Поток курса (например, '2024-11'): " FLOW
-read -p "Номер лекции (например, '02'): " LECTURE_NUMBER
-read -p "Тема лекции краткая (например, 'StatefulSet и Storage'): " TOPIC
-read -p "Полное название урока (например, 'Введение в Kubernetes: Хранение данных, Helm'): " LESSON_TITLE
+# Интерактивный режим - запрашиваем недостающие параметры
+if [ "$INTERACTIVE_MODE" = true ]; then
+    echo ""
+    echo -e "${YELLOW}📝 Введите недостающие параметры курса:${NC}"
 
-# Запрашиваем информацию о следующем вебинаре
-echo ""
-echo -e "${YELLOW}📅 Информация о следующем вебинаре:${NC}"
-read -p "Дата следующего вебинара (например, '15.12.2024'): " NEXT_DATE
-read -p "Тема следующего вебинара (например, 'Мониторинг и логирование'): " NEXT_TOPIC
+    if [ -z "$COURSE_NAME" ]; then
+        read -p "Название курса (например, 'Kubernetes Advanced'): " COURSE_NAME
+    fi
+    if [ -z "$FLOW" ]; then
+        read -p "Поток курса (например, '2024-11'): " FLOW
+    fi
+    if [ -z "$LECTURE_NUMBER" ]; then
+        read -p "Номер лекции (например, '02'): " LECTURE_NUMBER
+    fi
+    if [ -z "$TOPIC" ]; then
+        read -p "Тема лекции краткая (например, 'StatefulSet и Storage'): " TOPIC
+    fi
+    if [ -z "$LESSON_TITLE" ]; then
+        read -p "Полное название урока (например, 'Введение в Kubernetes: Хранение данных, Helm'): " LESSON_TITLE
+    fi
 
-# Запрашиваем номер активного модуля для карты курса
+    # Запрашиваем информацию о следующем вебинаре
+    echo ""
+    echo -e "${YELLOW}📅 Информация о следующем вебинаре:${NC}"
+    if [ -z "$NEXT_DATE" ]; then
+        read -p "Дата следующего вебинара (например, '15.12.2024'): " NEXT_DATE
+    fi
+    if [ -z "$NEXT_TOPIC" ]; then
+        read -p "Тема следующего вебинара (например, 'Мониторинг и логирование'): " NEXT_TOPIC
+    fi
+
+    # Запрашиваем номер активного модуля для карты курса
+    echo ""
+    echo -e "${YELLOW}📚 Карта курса:${NC}"
+    if [ -z "$ACTIVE_MODULE" ]; then
+        read -p "Номер активного модуля (например, '2'): " ACTIVE_MODULE
+    fi
+else
+    echo ""
+    echo -e "${GREEN}✅ Режим командной строки - все параметры заданы${NC}"
+fi
+
+# Выводим итоговые параметры
 echo ""
-echo -e "${YELLOW}📚 Карта курса:${NC}"
-read -p "Номер активного модуля (например, '2'): " ACTIVE_MODULE
+echo -e "${BLUE}📋 Параметры релиза:${NC}"
+echo "   Курс: $COURSE_NAME"
+echo "   Поток: $FLOW"
+echo "   Лекция: $LECTURE_NUMBER"
+echo "   Тема: $TOPIC"
+echo "   Урок: $LESSON_TITLE"
+echo "   Следующий вебинар: $NEXT_DATE - $NEXT_TOPIC"
+echo "   Активный модуль: $ACTIVE_MODULE"
+
+# Формируем пути и мета информацию
+OBSIDIAN_BASE="$HOME/Obsidian/MySecureNotes"
+COURSE_DIR="$OBSIDIAN_BASE/Knowledge/Courses/Presentations/$COURSE_NAME/$FLOW/${LECTURE_NUMBER}-${TOPIC// /-}"
+THEMES_DIR="$OBSIDIAN_BASE/.themes"
+META_FILE="$OBSIDIAN_BASE/Knowledge/Courses/Presentations/$COURSE_NAME/meta"
 
 # Читаем short из meta файла для формирования telegram канала
 TELEGRAM_CHANNEL=""
@@ -94,12 +225,6 @@ else
         fi
     done
 fi
-
-# Создаем структуру каталогов
-OBSIDIAN_BASE="$HOME/Obsidian/MySecureNotes"
-COURSE_DIR="$OBSIDIAN_BASE/Knowledge/Courses/Presentations/$COURSE_NAME/$FLOW/${LECTURE_NUMBER}-${TOPIC// /-}"
-THEMES_DIR="$OBSIDIAN_BASE/.themes"
-META_FILE="$OBSIDIAN_BASE/Knowledge/Courses/Presentations/$COURSE_NAME/meta"
 
 echo ""
 echo -e "${BLUE}📁 Создаем структуру каталогов${NC}"
