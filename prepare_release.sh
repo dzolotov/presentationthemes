@@ -55,6 +55,22 @@ echo ""
 echo -e "${YELLOW}📚 Карта курса:${NC}"
 read -p "Номер активного модуля (например, '2'): " ACTIVE_MODULE
 
+# Читаем short из meta файла для формирования telegram канала
+TELEGRAM_CHANNEL=""
+if [ -f "$META_FILE" ]; then
+    SHORT=$(grep "^short:" "$META_FILE" | sed 's/short: *//' | tr -d '"' || echo "")
+    if [ -n "$SHORT" ]; then
+        TELEGRAM_CHANNEL="${SHORT}-${FLOW}"
+        echo -e "${GREEN}✅ Telegram канал из meta: #${TELEGRAM_CHANNEL}${NC}"
+    else
+        TELEGRAM_CHANNEL="$COURSE_NAME"
+        echo -e "${YELLOW}⚠️  short не найден в meta, используем название курса: #${TELEGRAM_CHANNEL}${NC}"
+    fi
+else
+    TELEGRAM_CHANNEL="$COURSE_NAME"
+    echo -e "${YELLOW}⚠️  Meta файл не найден, используем название курса: #${TELEGRAM_CHANNEL}${NC}"
+fi
+
 # Проверяем, есть ли уже фон для карты знаний
 BACKGROUND_PROMPT=""
 if [ -f "resources/knowledge_map_bg.png" ]; then
@@ -200,7 +216,7 @@ paginate: false
 
 ### Активно<br/>участвуем
 
-#### Off-topic обсуждаем<br/>в учебной группе <span class="group-id">#$COURSE_NAME</span>
+#### Off-topic обсуждаем<br/>в учебной группе <span class="group-id">#$TELEGRAM_CHANNEL</span>
 
 ##### Задаем вопрос<br/>в чат или голосом
 
