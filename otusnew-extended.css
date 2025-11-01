@@ -2386,7 +2386,7 @@ section.page_image_right p:has(b) {
 /* Отступ для списков после параграфов */
 section.page_image_right p + ul,
 section.page_image_right p + ol {
-    margin-top: 40px !important;
+    margin-top: 8px !important;
 }
 
 /* Позиционируем первый текстовый элемент правильно под заголовком */
