@@ -1066,9 +1066,15 @@
           // Нормализуем искомый концепт для сравнения
           const normalizedSearchConcept = normalizeTag(conceptName);
 
-          // Сравниваем с искомым концептом
+          // Сравниваем с искомым концептом (точное совпадение)
           if (cleanedConcept === normalizedSearchConcept) {
-            console.log(`[FIND SLIDE] Found match at slide ${i}!`);
+            console.log(`[FIND SLIDE] Found exact match at slide ${i}!`);
+            return i;
+          }
+
+          // Fallback: частичное совпадение (концепт содержит искомое)
+          if (cleanedConcept.includes(normalizedSearchConcept) || normalizedSearchConcept.includes(cleanedConcept)) {
+            console.log(`[FIND SLIDE] Found partial match at slide ${i}: "${cleanedConcept}" contains "${normalizedSearchConcept}"`);
             return i;
           }
         }
