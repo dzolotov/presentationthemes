@@ -1143,7 +1143,7 @@ section.page_question img {
 }
 
 section.page_question {
-    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/openlesson-questions-full.png') no-repeat center center !important;
+    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-questions-full.png') no-repeat center center !important;
     background-size: cover !important;
 }
 

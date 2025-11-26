@@ -1,0 +1,919 @@
+/***
+ * @theme yandex-extended
+ * @size 16:9
+ * @auto-scaling false
+ */
+
+/* НЕ импортируем default тему, чтобы избежать конфликтов стилей */
+
+/* ============= БАЗОВЫЕ СТИЛИ ВМЕСТО DEFAULT ТЕМЫ ============= */
+
+/* Сброс базовых стилей */
+* {
+    box-sizing: border-box;
+}
+
+section {
+    width: 1280px;
+    height: 720px;
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+}
+
+/* Центрирование изображений по умолчанию - только для обычных страниц */
+section.page img:not([class]) {
+  display: block;
+  margin: -48px auto 0 auto;
+  max-width: 90%;
+  max-height: 412px;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Стили для SVG/PNG диаграмм из generated/resources */
+section.page img[src*="generated/resources/"] {
+    max-height: 480px !important; /* Уменьшаем на 40px для отступов */
+    max-width: 95% !important;
+    width: auto;
+    margin: auto;
+    display: block;
+    object-fit: contain;
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Для вертикальных диаграмм */
+section.page img[src*="_vertical.svg"],
+section.page img[src*="_vertical.png"] {
+    max-height: 480px !important; /* Уменьшаем на 40px для отступов */
+    max-width: 95% !important;
+    width: auto;
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Для горизонтальных диаграмм */
+section.page img[src*="_horizontal.svg"],
+section.page img[src*="_horizontal.png"] {
+    max-width: 95% !important;
+    max-height: 410px !important; /* Уменьшаем на 40px для отступов */
+    position: absolute;
+    top: calc(50% + 35px); /* Сдвигаем вниз на 35px для уменьшения отступа сверху */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Страница только с изображением - скрываем остальные элементы */
+section.page_image h1,
+section.page_image h2,
+section.page_image h3,
+section.page_image p,
+section.page_image ul,
+section.page_image ol,
+section.page_image blockquote,
+section.page_image code,
+section.page_image pre {
+    display: none;
+}
+
+/* Стиль для страниц только с изображением */
+section.page_image {
+    padding: 0 !important;
+}
+
+section.page_image img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0;
+    background: #000;
+}
+
+/* Обычные страницы */
+section.page {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page h1 {
+    font-size: 3.5rem;
+    color: #000000; /* 🟡 Черный текст для заголовков */
+}
+
+/* Страница-секция */
+section.page_section {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_section h1 {
+    color: #000000;
+    font-weight: bold;
+    font-size: 4.5rem;
+}
+
+/* Маршрут презентации */
+section.page_route {
+    background: linear-gradient(135deg, #FFDB4D, #FC0); /* 🟡 Градиент Яндекс желтого */
+    color: #000000; /* 🟡 Черный текст на желтом фоне */
+}
+
+section.page_route h1 {
+    color: #000000;
+}
+
+/* Страница с вопросами */
+section.page_question {
+    background: linear-gradient(45deg, #F5F5F5, #FFFFFF); /* 🟡 Светлый градиент */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_question h1 {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон для заголовка */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: 2rem 0;
+}
+
+section.page_question hr {
+    border: none;
+    height: 4px;
+    background-color: #FFDB4D; /* 🟡 Яндекс желтый для разделителя */
+    margin: 2rem 0;
+    border-radius: 2px;
+}
+
+/* Двухколонные слайды */
+section.page_twocolumn {
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_twocolumn h1 {
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_twocolumn h2 {
+    color: #000000; /* 🟡 Черный текст */
+}
+
+/* Стиль для img с фиксированным размером 1/4 страницы */
+section.page_with_qimage img {
+    max-width: 25% !important;
+    max-height: 25% !important;
+    width: auto;
+    height: auto;
+    display: block;
+    margin: 20px auto;
+    object-fit: contain;
+}
+
+section.page_image_left {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_image_right {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_image_top {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_image_bottom {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+/* Базовые стили для всех секций */
+section {
+    font-family: 'Helvetica Neue', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 1.5rem;
+    line-height: 1.6;
+    padding: 80px;
+    color: #000000; /* 🟡 Черный текст по умолчанию */
+    text-align: left;
+}
+
+/* Заголовки */
+h1 {
+    font-size: 3.5rem;
+    font-weight: 700;
+    margin-bottom: 2rem;
+    color: #000000; /* 🟡 Черный для заголовков */
+}
+
+h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: #000000; /* 🟡 Черный для подзаголовков */
+}
+
+h3 {
+    font-size: 2rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    color: #000000; /* 🟡 Черный для подзаголовков 3 уровня */
+}
+
+/* Списки */
+ul, ol {
+    margin: 1.5rem 0;
+    padding-left: 0; /* Убираем базовый padding */
+}
+
+ol {
+    counter-reset: list-item; /* Сбрасываем счетчик для каждого нового списка */
+    list-style-type: none; /* Принудительно убираем стандартную нумерацию */
+}
+
+li {
+    margin: 0.8rem 0;
+    line-height: 1.6;
+    padding-left: 2rem; /* Добавляем padding на элемент li */
+}
+
+ul li {
+    list-style: none;
+    position: relative;
+}
+
+ul li:before {
+    content: '●';
+    color: #FFDB4D; /* 🟡 Яндекс желтый для маркеров */
+    font-weight: bold;
+    position: absolute;
+    left: 0.5rem; /* Позиционируем относительно начала li */
+}
+
+ol li {
+    counter-increment: list-item;
+    position: relative;
+    list-style: none !important; /* Убираем стандартную нумерацию */
+    list-style-type: none !important; /* Дополнительно убираем тип списка */
+}
+
+ol li:before {
+    content: counter(list-item) '. '; /* Добавляем желтый номер */
+    color: #FC0; /* 🟡 Темный желтый для нумерации */
+    font-weight: bold;
+    position: absolute;
+    left: 0.5rem; /* Позиционируем так же как и буллеты */
+}
+
+/* Ссылки */
+a {
+    color: #FC0; /* 🟡 Темный желтый для ссылок */
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+a:hover {
+    color: #FFDB4D; /* 🟡 Светлый желтый при наведении */
+    text-decoration: underline;
+}
+
+/* Код */
+code {
+    background: #F5F5F5; /* 🟡 Светло-серый фон */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 0.2rem 0.4rem;
+    border-radius: 4px;
+    font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+    font-size: 0.9em;
+    border: 1px solid #E0E0E0;
+}
+
+pre {
+    background: #F5F5F5; /* 🟡 Светло-серый фон */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 1.5rem;
+    border-radius: 8px;
+    margin: 1.5rem 0;
+    overflow-x: auto;
+    border: 1px solid #E0E0E0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+pre code {
+    background: transparent;
+    padding: 0;
+    border: none;
+    color: inherit;
+}
+
+/* Цитаты */
+blockquote {
+    border-left: 4px solid #FFDB4D; /* 🟡 Яндекс желтый для полосы */
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+    font-style: italic;
+    color: #333333; /* 🟡 Темно-серый для цитат */
+    background: #F5F5F5; /* 🟡 Светло-серый фон */
+    padding: 1rem 1rem 1rem 2rem;
+    border-radius: 4px;
+}
+
+/* Таблицы */
+table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 1.5rem 0;
+    background: #FFFFFF; /* 🟡 Белый фон таблиц */
+}
+
+th, td {
+    border: 1px solid #E0E0E0;
+    padding: 0.8rem;
+    text-align: left;
+}
+
+th {
+    background: #FFDB4D; /* 🟡 Яндекс желтый для заголовков таблиц */
+    color: #000000; /* 🟡 Черный текст в заголовках */
+    font-weight: bold;
+}
+
+tr:nth-child(even) {
+    background: #F5F5F5; /* 🟡 Светло-серый для четных строк */
+}
+
+/* Горизонтальная линия */
+hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, #FFDB4D, #FC0); /* 🟡 Градиент Яндекс желтого */
+    margin: 2rem 0;
+    border-radius: 1px;
+}
+
+/* Выделение текста */
+strong, b {
+    font-weight: 700;
+    color: #000000; /* 🟡 Черный для выделенного текста */
+}
+
+em, i {
+    font-style: italic;
+    color: #333333; /* 🟡 Темно-серый для курсива */
+}
+
+mark {
+    background: #FFDB4D; /* 🟡 Яндекс желтый для выделения */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 0.2rem 0.4rem;
+    border-radius: 3px;
+}
+
+/* Адаптивность шрифтов */
+@media (max-width: 1280px) {
+    section {
+        font-size: 1.3rem;
+        padding: 60px;
+    }
+
+    h1 {
+        font-size: 3rem;
+    }
+
+    h2 {
+        font-size: 2.2rem;
+    }
+}
+
+/* ============= СПЕЦИАЛЬНЫЕ КЛАССЫ СТРАНИЦ ============= */
+
+/* Автонумерованные блоки (до 5) */
+section.page_numbered_blocks {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    padding: 80px 100px;
+    gap: 20px;
+    background: #FFFFFF; /* 🟡 Белый фон */
+}
+
+section.page_numbered_blocks h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_numbered_blocks p {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон блоков */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 25px 30px 25px 70px;
+    margin: 0;
+    border-radius: 12px;
+    position: relative;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+    border: 2px solid #FC0; /* 🟡 Темный желтый для границ */
+}
+
+section.page_numbered_blocks p:nth-of-type(1):before {
+    content: "1";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FC0; /* 🟡 Темный желтый */
+    color: #FFFFFF; /* 🟡 Белый номер */
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+section.page_numbered_blocks p:nth-of-type(2):before {
+    content: "2";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FC0;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+section.page_numbered_blocks p:nth-of-type(3):before {
+    content: "3";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FC0;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+section.page_numbered_blocks p:nth-of-type(4):before {
+    content: "4";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FC0;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+section.page_numbered_blocks p:nth-of-type(5):before {
+    content: "5";
+    position: absolute;
+    left: 25px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #FC0;
+    color: #FFFFFF;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    font-size: 1.2rem;
+}
+
+/* Процесс с шевронами (4 этапа) */
+section.page_process_steps {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 80px 50px;
+    background: #FFFFFF; /* 🟡 Белый фон */
+}
+
+section.page_process_steps h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_process_steps p {
+    background: #FFDB4D; /* 🟡 Яндекс желтый */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 20px 40px 20px 30px;
+    margin: 15px 0;
+    position: relative;
+    font-size: 1.2rem;
+    line-height: 1.4;
+    width: 80%;
+    clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 50%, calc(100% - 30px) 100%, 0 100%, 30px 50%);
+    border: 2px solid #FC0; /* 🟡 Темный желтый для границ шевронов */
+}
+
+section.page_process_steps p:first-of-type {
+    clip-path: polygon(0 0, calc(100% - 30px) 0, 100% 50%, calc(100% - 30px) 100%, 0 100%);
+    padding-left: 30px;
+}
+
+section.page_process_steps p:last-of-type {
+    clip-path: polygon(30px 0, 100% 0, 100% 100%, 0 100%, 30px 50%);
+    padding-right: 30px;
+}
+
+/* Сравнение двух случаев */
+section.page_two_cases {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 80px 60px;
+    align-items: start;
+    background: #FFFFFF; /* 🟡 Белый фон */
+}
+
+section.page_two_cases h1 {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_two_cases .case-left,
+section.page_two_cases .case-right {
+    background: #F5F5F5; /* 🟡 Светло-серый фон блоков */
+    padding: 30px;
+    border-radius: 12px;
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый для границ */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_two_cases .case-left h2,
+section.page_two_cases .case-right h2 {
+    color: #FC0; /* 🟡 Темный желтый для заголовков блоков */
+    margin-top: 0;
+    text-align: center;
+    border-bottom: 2px solid #FFDB4D;
+    padding-bottom: 10px;
+}
+
+/* Хороший vs плохой пример */
+section.page_good_bad_example {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_good_bad_example h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_good_bad_example .two-blocks {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    padding: 0 40px;
+}
+
+section.page_good_bad_example .block {
+    padding: 30px;
+    border-radius: 12px;
+    color: #000000; /* 🟡 Черный текст */
+}
+
+section.page_good_bad_example .block:first-child {
+    background: #FFF8DC; /* 🟡 Светло-желтый фон для "хорошо" */
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый */
+}
+
+section.page_good_bad_example .block:last-child {
+    background: #F5F5F5; /* 🟡 Светло-серый фон для "плохо" */
+    border: 2px solid #FC0; /* 🟡 Темный желтый */
+}
+
+section.page_good_bad_example .block h2 {
+    margin-top: 0;
+    text-align: center;
+}
+
+/* Определение термина */
+section.page_definition {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 120px;
+    background: #FFFFFF; /* 🟡 Белый фон */
+}
+
+section.page_definition h1 {
+    color: #FC0; /* 🟡 Темный желтый для термина */
+    margin-bottom: 40px;
+    position: relative;
+}
+
+section.page_definition h1:after {
+    content: '📖';
+    position: absolute;
+    right: -60px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 2rem;
+}
+
+section.page_definition p {
+    font-size: 1.8rem;
+    line-height: 1.6;
+    background: #F5F5F5; /* 🟡 Светло-серый фон определения */
+    padding: 30px;
+    border-radius: 15px;
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый для границы */
+    color: #000000; /* 🟡 Черный текст */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Карточки (2 колонки) */
+section.page_cards {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    padding: 80px 60px;
+}
+
+section.page_cards h1 {
+    text-align: center;
+    margin-bottom: 40px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_cards h2 {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон заголовков карточек */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 20px;
+    margin: 0 0 20px 0;
+    border-radius: 8px 8px 0 0;
+    text-align: center;
+    font-size: 1.8rem;
+}
+
+section.page_cards ul {
+    background: #F5F5F5; /* 🟡 Светло-серый фон карточек */
+    padding: 25px;
+    margin: 0;
+    border-radius: 0 0 8px 8px;
+    border: 2px solid #FFDB4D;
+    color: #000000; /* 🟡 Черный текст */
+}
+
+/* Карточки с изображениями (3 колонки) */
+section.page_cards_image {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    padding: 60px 40px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+    align-items: start;
+}
+
+section.page_cards_image h1 {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_cards_image h2 {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 15px;
+    margin: 0 0 15px 0;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 1.4rem;
+    position: relative;
+    padding-top: 120px; /* Место для изображения */
+}
+
+section.page_cards_image h2::after {
+    content: '';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    height: 100px;
+    background: linear-gradient(135deg, #FFDB4D, #FC0); /* 🟡 Градиент вместо изображения */
+    border-radius: 4px;
+    border: 1px solid #FC0;
+}
+
+section.page_cards_image ul {
+    background: #F5F5F5; /* 🟡 Светло-серый фон */
+    padding: 20px;
+    margin: 0;
+    border-radius: 8px;
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый для границ */
+    color: #000000; /* 🟡 Черный текст */
+}
+
+/* Карточки с изображениями (4 колонки) */
+section.page_cards_image_four {
+    background: #FFFFFF; /* 🟡 Белый фон */
+    padding: 60px 30px;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 25px;
+    align-items: start;
+}
+
+section.page_cards_image_four h1 {
+    grid-column: 1 / -1;
+    text-align: center;
+    margin-bottom: 30px;
+    color: #000000; /* 🟡 Черный заголовок */
+}
+
+section.page_cards_image_four h2 {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 10px;
+    margin: 0 0 10px 0;
+    border-radius: 6px;
+    text-align: center;
+    font-size: 1.2rem;
+    position: relative;
+    padding-top: 80px; /* Место для изображения */
+}
+
+section.page_cards_image_four h2::after {
+    content: '';
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    right: 5px;
+    height: 70px;
+    background: linear-gradient(135deg, #FFDB4D, #FC0); /* 🟡 Градиент вместо изображения */
+    border-radius: 3px;
+    border: 1px solid #FC0;
+}
+
+section.page_cards_image_four ul {
+    background: #F5F5F5; /* 🟡 Светло-серый фон */
+    padding: 15px;
+    margin: 0;
+    border-radius: 6px;
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый для границ */
+    color: #000000; /* 🟡 Черный текст */
+    font-size: 1.1rem;
+}
+
+/* ============= ДВУХКОЛОННЫЕ СЛАЙДЫ ============= */
+
+/* Контейнер двухколонного слайда */
+section.page_twocolumn .table-container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    max-height: calc(100vh - 160px);
+}
+
+/* Заголовки колонок */
+section.page_twocolumn .column-headers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    margin-bottom: 20px;
+}
+
+section.page_twocolumn .column1,
+section.page_twocolumn .column2 {
+    text-align: center;
+}
+
+section.page_twocolumn .column1 h1,
+section.page_twocolumn .column2 h1 {
+    color: #FC0; /* 🟡 Темный желтый для заголовков колонок */
+    margin-bottom: 10px;
+    font-size: 2.8rem;
+}
+
+section.page_twocolumn .column1 h2,
+section.page_twocolumn .column2 h2 {
+    color: #000000; /* 🟡 Черный для подзаголовков */
+    margin-bottom: 0;
+    font-size: 1.6rem;
+    font-weight: 400;
+}
+
+/* Обёртка таблицы */
+section.page_twocolumn .table-wrapper {
+    flex: 1;
+    overflow: hidden;
+}
+
+/* Таблица двухколонного слайда */
+section.page_twocolumn table {
+    width: 100%;
+    height: 100%;
+    border-collapse: separate;
+    border-spacing: 20px 15px;
+    margin: 0;
+}
+
+section.page_twocolumn td {
+    background: #F5F5F5; /* 🟡 Светло-серый фон ячеек */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 25px;
+    border: 2px solid #FFDB4D; /* 🟡 Яндекс желтый для границ */
+    border-radius: 12px;
+    font-size: 1.4rem;
+    line-height: 1.5;
+    vertical-align: top;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+section.page_twocolumn td:nth-child(1) {
+    border-left: 4px solid #FC0; /* 🟡 Темный желтый для левой колонки */
+}
+
+section.page_twocolumn td:nth-child(2) {
+    border-left: 4px solid #FFDB4D; /* 🟡 Светлый желтый для правой колонки */
+}
+
+/* Полная колонка для итогов */
+section.page_twocolumn .fullcolumn {
+    background: #FFDB4D; /* 🟡 Яндекс желтый фон для итогов */
+    color: #000000; /* 🟡 Черный текст */
+    padding: 30px;
+    margin: 20px 0;
+    border-radius: 15px;
+    border: 2px solid #FC0; /* 🟡 Темный желтый для границы */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+section.page_twocolumn .fullcolumn h1 {
+    color: #000000; /* 🟡 Черный заголовок итогов */
+    margin-bottom: 20px;
+}
+
+/* Мобильная адаптация */
+@media (max-width: 768px) {
+    section.page_cards_image {
+        grid-template-columns: 1fr;
+    }
+
+    section.page_cards_image_four {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    section.page_two_cases {
+        grid-template-columns: 1fr;
+    }
+
+    section.page_good_bad_example .two-blocks {
+        grid-template-columns: 1fr;
+    }
+
+    section.page_twocolumn .column-headers,
+    section.page_twocolumn table {
+        display: block;
+    }
+
+    section.page_twocolumn td {
+        display: block;
+        margin-bottom: 20px;
+    }
+}
