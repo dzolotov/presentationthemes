@@ -93,7 +93,7 @@ section.page_section::after {
     bottom: 60px;
     width: 130px;
     height: 150px;
-    background: url('openlesson-cursor.png') no-repeat center center;
+    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png') no-repeat center center;
     background-size: contain;
     pointer-events: none;
 }
@@ -901,13 +901,7 @@ section.page_section h2 {
 }
 
 section.page_section hr {
-    position: absolute;
-    top: 379px; /* 🔹 Смещение по Y */
-    left: 0; /* 🔹 Смещение по X */
-    width: 960px; /* 🔹 Ширина */
-    height: 2px !important; /* 🔹 Высота */
-    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image5.png") no-repeat center center;
-    background-size: 100% auto; /* 🔹 Растягиваем по ширине, авто высота */
+    display: none !important;
 }
 
 /* Основной контейнер страницы */
@@ -1144,13 +1138,7 @@ section.page_question h1 {
 }
 
 section.page_question hr {
-    position: absolute;
-    top: 379px; /* 🔹 Смещение по Y */
-    left: 0; /* 🔹 Смещение по X */
-    width: 960px; /* 🔹 Ширина */
-    height: 2px !important; /* 🔹 Высота */
-    background: url("https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/image5.png") no-repeat center center;
-    background-size: 100% auto; /* 🔹 Растягиваем по ширине, авто высота */
+    display: none !important;
 }
 
 section.page_question img {
@@ -1168,7 +1156,7 @@ section.page_question::after {
     bottom: 60px;
     width: 150px;
     height: 230px;
-    background: url('openlesson-question.png') no-repeat center center;
+    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-question.png') no-repeat center center;
     background-size: contain;
     pointer-events: none;
 }
