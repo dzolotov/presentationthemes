@@ -89,7 +89,7 @@ section.first_page, section.page_section, section.page_final {
 /* page_question стили перенесены ниже для полноэкранного отображения */
 
 section.page_section::after {
-    content: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png?v=2');
+    content: '';
     position: absolute;
     right: 60px;
     bottom: 60px;
@@ -97,8 +97,8 @@ section.page_section::after {
     height: 150px;
     pointer-events: none;
     z-index: 100;
-    background: transparent;
-    mix-blend-mode: normal;
+    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png?v=3') no-repeat center center;
+    background-size: contain;
 }
 
 section.first_page h1 {
@@ -3499,4 +3499,29 @@ section.page_fullscreen_image h1,
 section.page_fullscreen_image h2,
 section.page_fullscreen_image h3 {
     display: none !important;
+}
+
+
+/* ФИНАЛЬНОЕ ПЕРЕОПРЕДЕЛЕНИЕ для слайдов с вопросами - должно быть последним! */
+section.page_question,
+section[class="page_question"],
+section[class*="page_question"] {
+    border: 0 !important;
+    border-bottom: 0 !important;
+    border-top: 0 !important;  
+    border-left: 0 !important;
+    border-right: 0 !important;
+    outline: 0 !important;
+    box-shadow: none !important;
+    background: url("https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-questions-full.png") !important;
+    background-size: 960px 540px !important;
+    background-position: 0 0 !important;
+    background-repeat: no-repeat !important;
+}
+
+/* Убираем границу которая наследуется от общего правила */
+section.first_page.page_question,
+section.page_section.page_question,
+section.page_final.page_question {
+    border-bottom: 0 !important;
 }
