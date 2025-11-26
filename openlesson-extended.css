@@ -1145,6 +1145,16 @@ section.page_question img {
 section.page_question {
     background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-questions-full.png') no-repeat center center !important;
     background-size: cover !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: none !important;
+    border-bottom: none !important;
+    overflow: hidden !important;
+    width: 960px !important;
+    height: 540px !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
 }
 
 /* Скрываем все элементы, так как они есть на фоновом изображении */
