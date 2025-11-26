@@ -89,7 +89,7 @@ section.first_page, section.page_section, section.page_final {
 /* page_question стили перенесены ниже для полноэкранного отображения */
 
 section.page_section::after {
-    content: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png');
+    content: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png?v=2');
     position: absolute;
     right: 60px;
     bottom: 60px;
@@ -97,6 +97,8 @@ section.page_section::after {
     height: 150px;
     pointer-events: none;
     z-index: 100;
+    background: transparent;
+    mix-blend-mode: normal;
 }
 
 section.first_page h1 {
@@ -1144,20 +1146,24 @@ section.page_question img {
     z-index: 1;
 }
 
-section.page_question {
-    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-questions-full.png') no-repeat center center !important;
-    background-size: cover !important;
+/* Полноэкранный слайд с вопросами - максимальная специфичность */
+section.page_question,
+section[class*="page_question"] {
+    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-questions-full.png') no-repeat 0 0 !important;
+    background-size: 960px 540px !important;
     padding: 0 !important;
     margin: 0 !important;
-    border: none !important;
-    border-bottom: none !important;
-    border-top: none !important;
-    border-left: none !important;
-    border-right: none !important;
+    border: 0 solid transparent !important;
+    border-width: 0 !important;
+    outline: none !important;
     box-shadow: none !important;
     overflow: hidden !important;
     width: 960px !important;
     height: 540px !important;
+    min-width: 960px !important;
+    min-height: 540px !important;
+    max-width: 960px !important;
+    max-height: 540px !important;
     position: relative !important;
     display: block !important;
 }
