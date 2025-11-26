@@ -77,7 +77,7 @@ section {
     height: 540px;
 }
 
-section.first_page, section.page_question, section.page_section, section.page_final {
+section.first_page, section.page_section, section.page_final {
     position: relative;
     color: white;
     display: flex;
@@ -85,6 +85,8 @@ section.first_page, section.page_question, section.page_section, section.page_fi
     background: linear-gradient(135deg, #7DD3FC 0%, #818CF8 35%, #A78BFA 65%, #F0ABFC 100%) !important;
     background-size: cover !important;
 }
+
+/* page_question стили перенесены ниже для полноэкранного отображения */
 
 section.page_section::after {
     content: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png');
@@ -1149,12 +1151,15 @@ section.page_question {
     margin: 0 !important;
     border: none !important;
     border-bottom: none !important;
+    border-top: none !important;
+    border-left: none !important;
+    border-right: none !important;
+    box-shadow: none !important;
     overflow: hidden !important;
     width: 960px !important;
     height: 540px !important;
-    position: absolute !important;
-    top: 0 !important;
-    left: 0 !important;
+    position: relative !important;
+    display: block !important;
 }
 
 /* Скрываем все элементы, так как они есть на фоновом изображении */
