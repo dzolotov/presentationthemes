@@ -507,17 +507,22 @@ EOF
 
 # Проверяем аргументы
 if [ $# -lt 1 ]; then
-    echo "Использование: $0 input.md [format] [output_file]"
+    echo "Использование: $0 input.md [format] [theme] [output_file]"
     echo "Форматы: html, pdf, pptx"
+    echo "Темы: otus (по умолчанию), yandex, openlesson"
     echo "Примеры:"
     echo "  $0 presentation.md"
-    echo "  $0 presentation.md pdf"
-    echo "  $0 presentation.md pptx output.pptx"
+    echo "  $0 presentation.md html otus"
+    echo "  $0 presentation.md html yandex"
+    echo "  $0 presentation.md html openlesson"
+    echo "  $0 presentation.md pdf yandex"
+    echo "  $0 presentation.md pptx otus output.pptx"
     exit 1
 fi
 
 INPUT_FILE="$1"
 FORMAT="${2:-html}"  # По умолчанию HTML
+THEME="${3:-otus}"   # По умолчанию OTUS
 INPUT_NAME=$(basename "${INPUT_FILE%.md}")
 INPUT_DIR=$(dirname "$INPUT_FILE")
 
@@ -526,8 +531,8 @@ GENERATED_DIR="${INPUT_DIR}/generated"
 mkdir -p "$GENERATED_DIR"
 
 # Определяем выходной файл
-if [ $# -ge 3 ]; then
-    OUTPUT_FILE="$3"
+if [ $# -ge 4 ]; then
+    OUTPUT_FILE="$4"
 else
     OUTPUT_FILE="${GENERATED_DIR}/${INPUT_NAME}.${FORMAT}"
 fi
@@ -554,6 +559,7 @@ NC='\033[0m' # No Color
 echo -e "${BLUE}🚀 Начинаем сборку презентации${NC}"
 echo "   Входной файл: $INPUT_FILE"
 echo "   Формат: $FORMAT"
+echo "   Тема: $THEME"
 echo "   Выходной файл: $OUTPUT_FILE"
 
 # Проверяем формат
@@ -562,6 +568,38 @@ if [[ ! "$FORMAT" =~ ^(html|pdf|pptx)$ ]]; then
     echo "   Поддерживаемые форматы: html, pdf, pptx"
     exit 1
 fi
+
+# Проверяем тему
+if [[ ! "$THEME" =~ ^(otus|yandex|openlesson)$ ]]; then
+    echo -e "${RED}❌ Ошибка: неподдерживаемая тема '$THEME'${NC}"
+    echo "   Поддерживаемые темы: otus, yandex, openlesson"
+    exit 1
+fi
+
+# Определяем имя темы на основе выбранной темы и формата
+case "$THEME" in
+    "otus")
+        THEME_NAME="otusnew-extended"
+        ;;
+    "yandex")
+        if [[ "$FORMAT" == "pdf" ]]; then
+            THEME_NAME="yandex-extended-pdf"
+        else
+            THEME_NAME="yandex-extended"
+        fi
+        ;;
+    "openlesson")
+        if [[ "$FORMAT" == "pdf" ]]; then
+            THEME_NAME="openlesson-extended-pdf"
+        else
+            THEME_NAME="openlesson-extended"
+        fi
+        ;;
+    *)
+        echo -e "${RED}❌ Ошибка: неподдерживаемая тема '$THEME'${NC}"
+        exit 1
+        ;;
+esac
 
 # Проверяем наличие входного файла
 if [ ! -f "$INPUT_FILE" ]; then
@@ -628,6 +666,10 @@ fi
 # Копируем исходный файл во временный
 echo -e "${BLUE}📋 Создаём временную копию${NC}"
 cp "$INPUT_FILE" "$TEMP_FILE"
+
+# Заменяем theme в front matter на выбранную тему
+echo -e "${BLUE}🎨 Обновляем тему в front matter${NC}"
+sed -i '' "s/^theme: .*/theme: $THEME_NAME/" "$TEMP_FILE"
 
 # Создаём временный конфигурационный файл для Mermaid
 MERMAID_CONFIG="${TEMP_FILE}.mermaid-config.json"
@@ -1429,14 +1471,15 @@ except Exception as e:
         image_url = result["data"][0]["url"]
         urllib.request.urlretrieve(image_url, output_path)
     else:
-        print(f"Ошибка при генерации изображения: {e}")
+        print(f"⚠️  Ошибка при генерации изображения: {e}")
         if hasattr(e, 'response') and e.response is not None:
             try:
                 error_details = e.response.json()
                 print(f"Детали ошибки: {error_details}")
             except:
                 print(f"Ответ сервера: {e.response.text}")
-        exit(1)
+        print("⏭️  Пропускаем это изображение и продолжаем...")
+        exit(0)
 
     # Сохраняем также оригинальную копию без надписей
     original_path = output_path.replace('.png', '_original.png')
@@ -1447,42 +1490,44 @@ except Exception as e:
     print(f"Оригинал сохранен: {original_path}")
 
 except Exception as e:
-    print(f"Ошибка при генерации изображения: {e}")
+    print(f"⚠️  Ошибка при генерации изображения: {e}")
     if hasattr(e, 'response') and e.response is not None:
         try:
             error_details = e.response.json()
             print(f"Детали ошибки: {error_details}")
         except:
             print(f"Ответ сервера: {e.response.text}")
-    exit(1)
+    print("⏭️  Пропускаем это изображение и продолжаем...")
+    exit(0)
 EOF
 
             # Генерируем изображение с помощью Python
             if command -v python3 &> /dev/null; then
                 python3 "$DALLE_SCRIPT" || {
-                    echo -e "${RED}❌ Ошибка при генерации изображения #${IMAGE_COUNTER}${NC}"
-                    exit 1
+                    echo -e "${YELLOW}⚠️  Предупреждение: ошибка при генерации изображения #${IMAGE_COUNTER}, пропускаем${NC}"
                 }
             elif command -v python &> /dev/null; then
                 python "$DALLE_SCRIPT" || {
-                    echo -e "${RED}❌ Ошибка при генерации изображения #${IMAGE_COUNTER}${NC}"
-                    exit 1
+                    echo -e "${YELLOW}⚠️  Предупреждение: ошибка при генерации изображения #${IMAGE_COUNTER}, пропускаем${NC}"
                 }
             else
-                echo -e "${RED}❌ Ошибка: Python не найден${NC}"
-                exit 1
+                echo -e "${YELLOW}⚠️  Предупреждение: Python не найден, пропускаем генерацию изображения #${IMAGE_COUNTER}${NC}"
             fi
 
             rm "$DALLE_SCRIPT"
 
-            # Сразу создаем копию оригинала без текста
+            # Сразу создаем копию оригинала без текста (только если файл был создан)
             # ORIGINAL_IMAGE_PATH уже определен выше
-            cp "$IMAGE_PATH" "$ORIGINAL_IMAGE_PATH"
-            echo "      Оригинал сохранен: $ORIGINAL_IMAGE_PATH"
+            if [ -f "$IMAGE_PATH" ]; then
+                cp "$IMAGE_PATH" "$ORIGINAL_IMAGE_PATH"
+                echo "      Оригинал сохранен: $ORIGINAL_IMAGE_PATH"
 
-            # Удаляем промежуточный файл, оставляем только _original
-            rm "$IMAGE_PATH"
-            echo "      Удален промежуточный файл: $IMAGE_PATH"
+                # Удаляем промежуточный файл, оставляем только _original
+                rm "$IMAGE_PATH"
+                echo "      Удален промежуточный файл: $IMAGE_PATH"
+            else
+                echo -e "${YELLOW}      ⚠️  Изображение не было создано, пропускаем сохранение оригинала${NC}"
+            fi
         fi
 
         # Заменяем СОЗДАТЬ на ОБРАБОТАНО в TEMP_FILE (для корректной работы цикла) и в INPUT_FILE (для сохранения изменений)
@@ -1512,29 +1557,29 @@ EOF
             "pdf"|"pptx")
                 # Для PDF/PPTX используем простой Markdown
                 ESCAPED_PATH=$(echo "$IMAGE_RELATIVE_PATH" | sed 's/ /%20/g')
-                # Находим первое вхождение и добавляем изображение
-                FIRST_LINE=$(grep -n '<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
+                # Находим первое вхождение ОБРАБОТАНО (текущий промпт уже заменен выше)
+                FIRST_LINE=$(grep -n '<!-- ОБРАБОТАНО ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
                 if [ -n "$FIRST_LINE" ]; then
                     # Добавляем изображение перед строкой с промптом
                     sed "${FIRST_LINE}i\\
 \\
 \\
 ![]($ESCAPED_PATH)\\
-" "$TEMP_FILE" | sed 's/СОЗДАТЬ ИЗОБРАЖЕНИЕ:/ОБРАБОТАНО ИЗОБРАЖЕНИЕ:/' > "temp_output.md"
+" "$TEMP_FILE" > "temp_output.md"
                 else
                     cp "$TEMP_FILE" "temp_output.md"
                 fi
                 ;;
             "html")
                 # Для HTML используем div с flex
-                FIRST_LINE=$(grep -n '<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
+                FIRST_LINE=$(grep -n '<!-- ОБРАБОТАНО ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
                 if [ -n "$FIRST_LINE" ]; then
                     # Добавляем изображение перед строкой с промптом
                     sed "${FIRST_LINE}i\\
 <div style=\"display: flex; justify-content: center; align-items: center; width: 100%; height: 100%;\">\\
   <img src=\"$IMAGE_RELATIVE_PATH\" style=\"max-width: 90%; max-height: 380px;\" />\\
 </div>\\
-" "$TEMP_FILE" | sed 's/СОЗДАТЬ ИЗОБРАЖЕНИЕ:/ОБРАБОТАНО ИЗОБРАЖЕНИЕ:/' > "temp_output.md"
+" "$TEMP_FILE" > "temp_output.md"
                 else
                     cp "$TEMP_FILE" "temp_output.md"
                 fi
@@ -1542,13 +1587,6 @@ EOF
         esac
 
         mv "temp_output.md" "$TEMP_FILE"
-
-        # Заменяем первое вхождение СОЗДАТЬ ИЗОБРАЖЕНИЕ на ОБРАБОТАНО ИЗОБРАЖЕНИЕ независимо от формата (с правильной локалью для UTF-8)
-        REMAINING_LINE=$(grep -n '<!-- СОЗДАТЬ ИЗОБРАЖЕНИЕ:' "$TEMP_FILE" | head -1 | cut -d: -f1)
-        if [ -n "$REMAINING_LINE" ]; then
-            LANG=ru_RU.UTF-8 LC_ALL=ru_RU.UTF-8 sed -i.bak "${REMAINING_LINE}s/СОЗДАТЬ ИЗОБРАЖЕНИЕ/ОБРАБОТАНО ИЗОБРАЖЕНИЕ/" "$TEMP_FILE"
-            rm -f "$TEMP_FILE.bak"
-        fi
 
         # После завершения всех изменений в файле, находим ВСЕ строки с ОБРАБОТАНО ИЗОБРАЖЕНИЕ и обрабатываем текст
         TEXT_APPLIED=false
@@ -1929,15 +1967,14 @@ case "$FORMAT" in
         ;;
 esac
 
-# Единая тема для всех форматов
-THEME_NAME="otusnew-extended"
+echo -e "${BLUE}🎨 Используем тему: $THEME_NAME${NC}"
 
 # Генерируем выходной файл
 # Используем единый CSS файл для всех форматов
 $MARP_CMD "$TEMP_FILE" \
     $FORMAT_ARGS \
     --theme-set ~/Obsidian/MySecureNotes/.themes \
-    --theme otusnew-extended \
+    --theme "$THEME_NAME" \
     --allow-local-files \
     --no-stdin \
     -o "$TEMP_OUTPUT_FILE" || {
