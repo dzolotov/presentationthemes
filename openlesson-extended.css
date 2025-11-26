@@ -87,15 +87,14 @@ section.first_page, section.page_question, section.page_section, section.page_fi
 }
 
 section.page_section::after {
-    content: '';
+    content: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png');
     position: absolute;
     right: 60px;
     bottom: 60px;
     width: 130px;
     height: 150px;
-    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-cursor.png') no-repeat center center;
-    background-size: contain;
     pointer-events: none;
+    z-index: 100;
 }
 
 section.first_page h1 {
@@ -1126,15 +1125,7 @@ a:hover {
 }
 
 section.page_question h1 {
-    position: absolute;
-    top: 117px;
-    left: 56px;
-    width: 775px;
-    height: 200px;
-    font-family: Roboto, serif;
-    font-size: 56px;
-    font-weight: bold;
-    color: white;
+    display: none; /* Скрываем, так как текст уже есть на фоновом изображении */
 }
 
 section.page_question hr {
@@ -1143,22 +1134,50 @@ section.page_question hr {
 
 section.page_question img {
     position: absolute;
-    top: 320px;
-    left: 120px;
-    width: 600px;
-    background: url("questions.png") no-repeat center center;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    height: auto;
+    z-index: 1;
 }
 
+section.page_question {
+    background: url('https://raw.githubusercontent.com/dzolotov/otus/refs/heads/main/theme/openlesson-questions-full.png') no-repeat center center !important;
+    background-size: cover !important;
+}
+
+/* Скрываем все элементы, так как они есть на фоновом изображении */
 section.page_question::after {
-    content: '';
+    display: none;
+}
+
+section.page_question p {
+    display: none;
+}
+
+section.page_question img {
+    display: none;
+}
+
+/* Списки на слайде с вопросами */
+section.page_question ul {
     position: absolute;
+    bottom: 40px;
+    left: 80px;
     right: 80px;
-    bottom: 60px;
-    width: 150px;
-    height: 230px;
-    background: url('https://raw.githubusercontent.com/dzolotov/presentationthemes/main/openlesson-question.png') no-repeat center center;
-    background-size: contain;
-    pointer-events: none;
+    display: flex;
+    justify-content: space-between;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    z-index: 2;
+}
+
+section.page_question ul li {
+    color: white;
+    font-size: 22px;
+    max-width: 45%;
 }
 
 section.page_final {
